@@ -193,12 +193,12 @@ async function convertFile(inputPath) {
   }
 }
 
-async function convertAll() {
-  const dir = process.cwd();
+async function convertAll(dir) {
+  dir = dir ? path.resolve(dir) : process.cwd();
   const mdFiles = fs.readdirSync(dir).filter((f) => f.endsWith(".md"));
 
   if (mdFiles.length === 0) {
-    console.log("No markdown files found in the current directory.");
+    console.log(`No markdown files found in: ${dir}`);
     return;
   }
 
@@ -216,17 +216,21 @@ async function main() {
   const args = process.argv.slice(2);
 
   if (args.includes("--all")) {
-    await convertAll();
+    const allIdx = args.indexOf("--all");
+    const dir = args[allIdx + 1] && !args[allIdx + 1].startsWith("-")
+      ? args[allIdx + 1]
+      : undefined;
+    await convertAll(dir);
   } else if (args.length > 0 && !args[0].startsWith("-")) {
     await convertFile(args[0]);
   } else {
     console.log("Usage:");
-    console.log("  node convert-to-pdf.js <file.md>    Convert a specific file");
-    console.log("  node convert-to-pdf.js --all         Convert all .md files");
+    console.log("  node convert-to-pdf.js <file.md>          Convert a specific file");
+    console.log("  node convert-to-pdf.js --all [directory]  Convert all .md files in directory");
     console.log("");
     console.log("Or use npm scripts:");
-    console.log("  npm run convert -- <file.md>         Convert a specific file");
-    console.log("  npm run convert:all                  Convert all .md files");
+    console.log("  npm run convert -- <file.md>              Convert a specific file");
+    console.log("  npm run convert:all                       Convert all .md files");
   }
 }
 
