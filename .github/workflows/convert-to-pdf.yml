@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "**.md"
+      - "notes/**.md"
   workflow_dispatch:
 
 permissions:
@@ -23,19 +23,23 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
+          cache-dependency-path: pdf-converter/package-lock.json
 
       - name: Install dependencies
         run: npm ci
+        working-directory: pdf-converter
 
       - name: Install Chromium dependencies
         run: npx puppeteer browsers install chrome
+        working-directory: pdf-converter
 
       - name: Convert all Markdown files to PDF
-        run: npm run convert:all
+        run: npm run convert:all -- ../notes
+        working-directory: pdf-converter
 
       - name: Upload PDFs
         uses: actions/upload-artifact@v4
         with:
           name: pdf-notes
-          path: output/*.pdf
+          path: notes/output/*.pdf
           retention-days: 90
