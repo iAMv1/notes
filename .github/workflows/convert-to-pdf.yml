@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "notes/**.md"
+      - "notes/**"
   workflow_dispatch:
 
 permissions:
@@ -38,8 +38,29 @@ jobs:
         working-directory: pdf-converter
 
       - name: Upload PDFs
+        id: upload
         uses: actions/upload-artifact@v4
         with:
           name: pdf-notes
           path: notes/output/*.pdf
           retention-days: 90
+
+      - name: Summary
+        run: |
+          echo "## 📄 PDF Conversion Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Generated PDFs" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+          for pdf in notes/output/*.pdf; do
+            if [ -f "$pdf" ]; then
+              name=$(basename "$pdf")
+              size=$(du -h "$pdf" | cut -f1)
+              echo "| $name | $size |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📥 Download" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Download the **pdf-notes** artifact from the **Artifacts** section at the top of this workflow run page." >> $GITHUB_STEP_SUMMARY
