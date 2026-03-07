@@ -1,0 +1,41 @@
+name: Convert Markdown to PDF
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium dependencies
+        run: npx puppeteer browsers install chrome
+
+      - name: Convert all Markdown files to PDF
+        run: npm run convert:all
+
+      - name: Upload PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf-notes
+          path: output/*.pdf
+          retention-days: 90
