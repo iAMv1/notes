@@ -1,6 +1,15 @@
 const { mdToPdf } = require("md-to-pdf");
+const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
+
+const MERMAID_JS_PATH = path.resolve(
+  __dirname,
+  "node_modules",
+  "mermaid",
+  "dist",
+  "mermaid.min.js"
+);
 
 const CSS = `
   body {
@@ -52,7 +61,68 @@ const CSS = `
   hr { border: none; border-top: 1px solid #eaecef; margin: 24px 0; }
   a { color: #0366d6; text-decoration: none; }
   img { max-width: 100%; }
+  .mermaid-diagram { text-align: center; margin: 16px 0; }
+  .mermaid-diagram svg { max-width: 100%; height: auto; }
 `;
+
+const MERMAID_BLOCK_REGEX = /```mermaid\n([\s\S]*?)```/g;
+
+/**
+ * Render mermaid code blocks to SVG using Puppeteer and the local mermaid bundle.
+ */
+async function renderMermaidToSvg(mermaidBlocks) {
+  if (mermaidBlocks.length === 0) return [];
+
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+  const page = await browser.newPage();
+
+  const divsHtml = mermaidBlocks
+    .map((code, i) => `<pre class="mermaid" id="m${i}">${escapeHtml(code)}</pre>`)
+    .join("\n");
+
+  await page.setContent(`<html><body>${divsHtml}</body></html>`);
+  await page.addScriptTag({ path: MERMAID_JS_PATH });
+  await page.evaluate(
+    'mermaid.initialize({ startOnLoad: false, theme: "default" })'
+  );
+  await page.evaluate('mermaid.run({ querySelector: ".mermaid" })');
+
+  const svgs = await page.evaluate(
+    'Array.from(document.querySelectorAll(".mermaid")).map(el => el.innerHTML)'
+  );
+
+  await browser.close();
+  return svgs;
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/**
+ * Replace mermaid code blocks in markdown with pre-rendered SVG diagrams.
+ */
+async function processMermaid(markdown) {
+  const blocks = [];
+  let match;
+  const regex = new RegExp(MERMAID_BLOCK_REGEX.source, MERMAID_BLOCK_REGEX.flags);
+  while ((match = regex.exec(markdown)) !== null) {
+    blocks.push(match[1]);
+  }
+
+  if (blocks.length === 0) return markdown;
+
+  console.log(`  Rendering ${blocks.length} Mermaid diagram(s)...`);
+  const svgs = await renderMermaidToSvg(blocks);
+
+  let i = 0;
+  return markdown.replace(MERMAID_BLOCK_REGEX, () => {
+    const svg = svgs[i++];
+    return `<div class="mermaid-diagram">${svg}</div>`;
+  });
+}
 
 async function convertFile(inputPath) {
   const resolvedInput = path.resolve(inputPath);
@@ -73,8 +143,11 @@ async function convertFile(inputPath) {
   console.log(`Converting: ${resolvedInput}`);
   console.log(`Output:     ${outputPath}`);
 
+  const markdown = fs.readFileSync(resolvedInput, "utf-8");
+  const processedMarkdown = await processMermaid(markdown);
+
   const pdf = await mdToPdf(
-    { path: resolvedInput },
+    { content: processedMarkdown },
     {
       css: CSS,
       pdf_options: {

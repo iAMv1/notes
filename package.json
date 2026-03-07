@@ -7,6 +7,7 @@
     "convert:all": "node convert-to-pdf.js --all"
   },
   "dependencies": {
-    "md-to-pdf": "^5.2.5"
+    "md-to-pdf": "^5.2.5",
+    "mermaid": "^11.12.3"
   }
 }
