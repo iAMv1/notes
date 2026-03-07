@@ -83,6 +83,13 @@ async function renderMermaidToSvg(mermaidBlocks) {
     .join("\n");
 
   await page.setContent(`<html><body>${divsHtml}</body></html>`);
+
+  if (!fs.existsSync(MERMAID_JS_PATH)) {
+    await browser.close();
+    throw new Error(
+      `Mermaid bundle not found at ${MERMAID_JS_PATH}. Run "npm install" to install dependencies.`
+    );
+  }
   await page.addScriptTag({ path: MERMAID_JS_PATH });
   await page.evaluate(
     'mermaid.initialize({ startOnLoad: false, theme: "default" })'
@@ -98,7 +105,12 @@ async function renderMermaidToSvg(mermaidBlocks) {
 }
 
 function escapeHtml(str) {
-  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 /**
@@ -106,9 +118,7 @@ function escapeHtml(str) {
  */
 async function processMermaid(markdown) {
   const blocks = [];
-  let match;
-  const regex = new RegExp(MERMAID_BLOCK_REGEX.source, MERMAID_BLOCK_REGEX.flags);
-  while ((match = regex.exec(markdown)) !== null) {
+  for (const match of markdown.matchAll(MERMAID_BLOCK_REGEX)) {
     blocks.push(match[1]);
   }
 
