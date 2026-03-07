@@ -151,7 +151,6 @@ const CSS = `
     letter-spacing: 0.3px;
   }
   table tr:nth-child(even) { background-color: #f5f7f9; }
-  table tr:hover { background-color: #eef2f5; }
   table td code {
     font-size: 8.5pt;
   }
