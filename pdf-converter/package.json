@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "express": "^4.21.2",
+    "express-rate-limit": "^8.3.0",
     "md-to-pdf": "^5.2.5",
     "mermaid": "^11.12.3",
     "puppeteer": "^24.38.0"

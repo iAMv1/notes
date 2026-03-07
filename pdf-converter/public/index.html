@@ -494,6 +494,8 @@
     let autoSaveTimer = null;
     let previewCSS = "";
     let updateTimer = null;
+    const AUTO_SAVE_DELAY = 10000;
+    const PREVIEW_DEBOUNCE = 120;
 
     // ── Initialization ──
     document.addEventListener("DOMContentLoaded", init);
@@ -724,11 +726,11 @@
         debouncedUpdatePreview();
         updateStats();
 
-        // Auto-save after 10s of inactivity
+        // Auto-save after inactivity
         clearTimeout(autoSaveTimer);
         autoSaveTimer = setTimeout(() => {
           if (isModified && currentFile) saveFile();
-        }, 10000);
+        }, AUTO_SAVE_DELAY);
       });
 
       // Tab key inserts spaces
@@ -772,7 +774,7 @@
 
     function debouncedUpdatePreview() {
       clearTimeout(updateTimer);
-      updateTimer = setTimeout(updatePreview, 120);
+      updateTimer = setTimeout(updatePreview, PREVIEW_DEBOUNCE);
     }
 
     // ── Stats ──
@@ -879,7 +881,7 @@
     }
 
     function escapeAttr(str) {
-      return str.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+      return str.replace(/&/g, "&amp;").replace(/'/g, "&#39;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
   </script>
 </body>

@@ -1,4 +1,5 @@
 const express = require("express");
+const rateLimit = require("express-rate-limit");
 const path = require("path");
 const fs = require("fs");
 const { CSS, convertFile } = require("./convert-to-pdf");
@@ -7,7 +8,20 @@ const app = express();
 const NOTES_DIR = path.resolve(__dirname, "..", "notes");
 const OUTPUT_DIR = path.join(NOTES_DIR, "output");
 
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 app.use(express.json({ limit: "10mb" }));
+app.use((_req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  next();
+});
+app.use("/api", apiLimiter);
 app.use(express.static(path.join(__dirname, "public")));
 
 /**
@@ -117,7 +131,7 @@ app.post("/api/export/:name", async (req, res) => {
 // ── Download PDF ──
 app.get("/api/pdf/:name", (req, res) => {
   const name = path.basename(req.params.name);
-  if (!name.endsWith(".pdf") || /[^a-zA-Z0-9 ._-]/.test(name))
+  if (!name.endsWith(".pdf") || !/^[a-zA-Z0-9][a-zA-Z0-9._-]*\.pdf$/.test(name))
     return res.status(400).json({ error: "Invalid PDF filename" });
 
   const pdfPath = path.join(OUTPUT_DIR, name);
