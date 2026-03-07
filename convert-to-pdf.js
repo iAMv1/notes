@@ -11,6 +11,22 @@ const MERMAID_JS_PATH = path.resolve(
   "mermaid.min.js"
 );
 
+const CHROME_ARGS = [
+  "--no-sandbox",
+  "--disable-setuid-sandbox",
+  "--disable-dev-shm-usage",
+  "--disable-background-networking",
+  "--disable-default-apps",
+  "--disable-extensions",
+  "--disable-sync",
+  "--disable-component-update",
+  "--disable-domain-reliability",
+  "--disable-client-side-phishing-detection",
+  "--disable-component-extensions-with-background-pages",
+  "--no-first-run",
+  "--disable-breakpad",
+];
+
 const CSS = `
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -74,7 +90,7 @@ async function renderMermaidToSvg(mermaidBlocks) {
   if (mermaidBlocks.length === 0) return [];
 
   const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: CHROME_ARGS,
   });
   const page = await browser.newPage();
 
@@ -166,7 +182,7 @@ async function convertFile(inputPath) {
         printBackground: true,
       },
       launch_options: {
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        args: CHROME_ARGS,
       },
     }
   );
