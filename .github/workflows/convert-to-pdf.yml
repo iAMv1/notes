@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "notes/**.md"
+      - "notes/**"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   convert:
@@ -17,8 +17,30 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect changed markdown files
+        id: changes
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # Manual trigger: convert all markdown files
+            find notes -name '*.md' -type f > /tmp/changed_files.txt
+          else
+            # Push trigger: only convert changed markdown files
+            git diff --name-only --diff-filter=ACMR HEAD~1 HEAD -- 'notes/**/*.md' > /tmp/changed_files.txt
+          fi
+          if [ -s /tmp/changed_files.txt ]; then
+            echo "has_files=true" >> "$GITHUB_OUTPUT"
+            echo "Files to convert:"
+            cat /tmp/changed_files.txt
+          else
+            echo "has_files=false" >> "$GITHUB_OUTPUT"
+            echo "No markdown files to convert."
+          fi
 
       - name: Setup Node.js
+        if: steps.changes.outputs.has_files == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -26,20 +48,52 @@ jobs:
           cache-dependency-path: pdf-converter/package-lock.json
 
       - name: Install dependencies
+        if: steps.changes.outputs.has_files == 'true'
         run: npm ci
         working-directory: pdf-converter
 
       - name: Install Chromium dependencies
+        if: steps.changes.outputs.has_files == 'true'
         run: npx puppeteer browsers install chrome
         working-directory: pdf-converter
 
-      - name: Convert all Markdown files to PDF
-        run: npm run convert:all -- ../notes
+      - name: Convert changed Markdown files to PDF
+        if: steps.changes.outputs.has_files == 'true'
+        run: |
+          while IFS= read -r file; do
+            echo "Converting $file ..."
+            node convert-to-pdf.js "../$file"
+          done < /tmp/changed_files.txt
         working-directory: pdf-converter
 
-      - name: Upload PDFs
-        uses: actions/upload-artifact@v4
-        with:
-          name: pdf-notes
-          path: notes/output/*.pdf
-          retention-days: 90
+      - name: Commit and push PDFs
+        if: steps.changes.outputs.has_files == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add notes/output/
+          if git diff --cached --quiet; then
+            echo "No new or changed PDFs to commit."
+          else
+            git commit -m "📄 Auto-generate PDFs for changed notes"
+            git push
+          fi
+
+      - name: Summary
+        if: steps.changes.outputs.has_files == 'true'
+        run: |
+          echo "## 📄 PDF Conversion Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Generated PDFs" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+          for pdf in notes/output/*.pdf; do
+            if [ -f "$pdf" ]; then
+              name=$(basename "$pdf")
+              size=$(du -h "$pdf" | cut -f1)
+              echo "| $name | $size |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "PDFs have been committed to the \`notes/output/\` folder in the repository." >> $GITHUB_STEP_SUMMARY

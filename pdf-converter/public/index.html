@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notes Editor</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>" />
+  <style>
+    /* ── CSS Variables ── */
+    :root {
+      --primary: #1a73e8;
+      --primary-hover: #1557b0;
+      --danger: #d93025;
+      --danger-hover: #b3261e;
+      --success: #1e8e3e;
+      --bg: #f0f2f5;
+      --surface: #ffffff;
+      --text: #202124;
+      --text-secondary: #5f6368;
+      --border: #dadce0;
+      --sidebar-bg: #f8f9fa;
+      --sidebar-width: 250px;
+      --toolbar-height: 56px;
+      --status-height: 32px;
+      --radius: 8px;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Google Sans", "Segoe UI", Roboto, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Toolbar ── */
+    .toolbar {
+      height: var(--toolbar-height);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      gap: 12px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .menu-btn {
+      width: 40px; height: 40px;
+      border: none; background: none;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-secondary);
+      transition: background 0.15s;
+    }
+    .menu-btn:hover { background: #e8eaed; }
+    .logo {
+      font-size: 24px;
+      display: flex; align-items: center;
+      margin-right: 4px;
+    }
+    .file-name {
+      font-size: 18px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 300px;
+    }
+    .save-indicator {
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .save-indicator.saved { background: #e6f4ea; color: var(--success); }
+    .save-indicator.unsaved { background: #fce8e6; color: var(--danger); }
+    .save-indicator.saving { background: #e8f0fe; color: var(--primary); }
+
+    /* ── Buttons ── */
+    .btn {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: all 0.15s;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .btn:hover { background: #f1f3f4; border-color: #c6c9cc; }
+    .btn:active { background: #e8eaed; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+    .btn-danger {
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+    .btn-danger:hover { background: #fce8e6; }
+    .btn-icon {
+      padding: 6px 8px;
+      border: none;
+      background: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-secondary);
+      transition: background 0.15s;
+    }
+    .btn-icon:hover { background: #e8eaed; }
+    .btn-sm { padding: 4px 10px; font-size: 12px; }
+
+    /* ── Container ── */
+    .container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      transition: margin-left 0.25s ease;
+    }
+    .sidebar.collapsed {
+      margin-left: calc(-1 * var(--sidebar-width));
+    }
+    .sidebar-header {
+      padding: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .file-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+    .file-item {
+      padding: 10px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      transition: background 0.1s;
+      position: relative;
+    }
+    .file-item:hover { background: #e8eaed; }
+    .file-item.active { background: #d3e3fd; color: var(--primary); font-weight: 500; }
+    .file-item-icon { font-size: 16px; flex-shrink: 0; }
+    .file-item-name {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .file-item-size {
+      font-size: 11px;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+    .file-item-delete {
+      opacity: 0;
+      font-size: 14px;
+      padding: 2px 4px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-radius: 4px;
+      color: var(--text-secondary);
+      transition: all 0.1s;
+      flex-shrink: 0;
+    }
+    .file-item:hover .file-item-delete { opacity: 1; }
+    .file-item-delete:hover { background: #fce8e6; color: var(--danger); }
+
+    /* ── Main Editor Area ── */
+    .main {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+    .pane {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .editor-pane { flex: 1; border-right: 1px solid var(--border); }
+    .preview-pane { flex: 1; }
+    .pane-header {
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      background: var(--sidebar-bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    #editor {
+      flex: 1;
+      width: 100%;
+      border: none;
+      outline: none;
+      resize: none;
+      padding: 20px 24px;
+      font-family: "SF Mono", "Cascadia Code", "Fira Code", "JetBrains Mono", Consolas, "Liberation Mono", monospace;
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--surface);
+      tab-size: 2;
+    }
+    #editor::placeholder { color: #bbb; }
+    .preview-wrapper {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--surface);
+    }
+    #preview {
+      padding: 24px 32px;
+      max-width: 100%;
+    }
+
+    /* ── Resizable Divider ── */
+    .divider {
+      width: 4px;
+      cursor: col-resize;
+      background: transparent;
+      transition: background 0.15s;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .divider:hover, .divider.active { background: var(--primary); }
+
+    /* ── Status Bar ── */
+    .status-bar {
+      height: var(--status-height);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 20px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    /* ── Empty State ── */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-secondary);
+      gap: 12px;
+      padding: 40px;
+      text-align: center;
+    }
+    .empty-state .icon { font-size: 48px; opacity: 0.5; }
+    .empty-state h3 { font-weight: 500; color: var(--text); }
+    .empty-state p { font-size: 14px; max-width: 360px; }
+
+    /* ── Toast Notifications ── */
+    .toast-container {
+      position: fixed;
+      bottom: 48px;
+      right: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast {
+      padding: 12px 20px;
+      border-radius: var(--radius);
+      background: #323232;
+      color: white;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toast.error { background: var(--danger); }
+    .toast.success { background: var(--success); }
+    @keyframes toastIn { from { transform: translateY(20px); opacity: 0; } }
+    @keyframes toastOut { to { transform: translateY(20px); opacity: 0; } }
+
+    /* ── Loading Overlay ── */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .loading-overlay.hidden { display: none; }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Modal ── */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 200;
+    }
+    .modal-backdrop.hidden { display: none; }
+    .modal {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 24px;
+      min-width: 380px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .modal h3 { font-size: 18px; margin-bottom: 16px; }
+    .modal input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+    }
+    .modal input[type="text"]:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(26,115,232,0.2); }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+  </style>
+</head>
+<body>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <button class="menu-btn" onclick="toggleSidebar()" title="Toggle sidebar">☰</button>
+      <span class="logo">📝</span>
+      <span class="file-name" id="fileName">Notes Editor</span>
+      <span class="save-indicator saved" id="saveIndicator">Saved</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="btn" onclick="saveFile()" id="saveBtn" title="Ctrl+S">
+        💾 Save
+      </button>
+      <button class="btn btn-primary" onclick="exportPdf()" id="exportBtn" title="Export to PDF">
+        📄 Export PDF
+      </button>
+      <button class="btn" onclick="showNewFileModal()" title="Create new file">
+        ➕ New
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span>📁 Files</span>
+      </div>
+      <div class="file-list" id="fileList"></div>
+    </aside>
+
+    <!-- Editor Area -->
+    <div class="main" id="mainArea">
+      <div class="pane editor-pane" id="editorPane">
+        <div class="pane-header"><span>✏️ Markdown</span></div>
+        <textarea id="editor" placeholder="Select a file or create a new one to start editing..." spellcheck="false"></textarea>
+      </div>
+      <div class="divider" id="divider"></div>
+      <div class="pane preview-pane" id="previewPane">
+        <div class="pane-header"><span>👁️ Preview</span></div>
+        <div class="preview-wrapper">
+          <div id="preview">
+            <div class="empty-state">
+              <div class="icon">📄</div>
+              <h3>Live Preview</h3>
+              <p>Select a file from the sidebar or create a new one. Your markdown will render here in real time.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span id="statusLines">Lines: 0</span>
+    <span id="statusWords">Words: 0</span>
+    <span id="statusChars">Chars: 0</span>
+    <span style="flex:1"></span>
+    <span id="statusInfo">Ready</span>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay hidden" id="loadingOverlay">
+    <div style="text-align:center">
+      <div class="spinner"></div>
+      <p style="margin-top:16px;color:var(--text-secondary)" id="loadingText">Generating PDF...</p>
+    </div>
+  </div>
+
+  <!-- New File Modal -->
+  <div class="modal-backdrop hidden" id="newFileModal">
+    <div class="modal">
+      <h3>📄 Create New File</h3>
+      <input type="text" id="newFileName" placeholder="my-notes.md" autocomplete="off" />
+      <div class="modal-actions">
+        <button class="btn" onclick="hideNewFileModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="createFile()">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marked.js (served locally from node_modules) -->
+  <script src="/vendor/marked.min.js"></script>
+
+  <script>
+    // ── State ──
+    let currentFile = null;
+    let isModified = false;
+    let autoSaveTimer = null;
+    let previewCSS = "";
+    let updateTimer = null;
+    const AUTO_SAVE_DELAY = 10000;
+    const PREVIEW_DEBOUNCE = 120;
+
+    // ── Initialization ──
+    document.addEventListener("DOMContentLoaded", init);
+
+    async function init() {
+      await loadPreviewCSS();
+      await loadFiles();
+      setupEditor();
+      setupDivider();
+      setupKeyboard();
+
+      if (typeof marked !== "undefined") {
+        marked.setOptions({ gfm: true, breaks: true });
+      }
+    }
+
+    // ── Preview CSS ──
+    async function loadPreviewCSS() {
+      try {
+        const res = await fetch("/api/css");
+        previewCSS = await res.text();
+        applyPreviewCSS();
+      } catch (e) {
+        console.warn("Could not load preview CSS:", e);
+      }
+    }
+
+    function applyPreviewCSS() {
+      let style = document.getElementById("preview-style");
+      if (!style) {
+        style = document.createElement("style");
+        style.id = "preview-style";
+        document.head.appendChild(style);
+      }
+      // Scope the PDF CSS to the preview container
+      const scoped = previewCSS.replace(/body\s*\{/g, "#preview {")
+        .replace(/\bh1\b/g, "#preview h1")
+        .replace(/\bh2\b/g, "#preview h2")
+        .replace(/\bh3\b/g, "#preview h3")
+        .replace(/\bh4\b/g, "#preview h4")
+        .replace(/\bh5\b/g, "#preview h5")
+        .replace(/\bh6\b/g, "#preview h6")
+        .replace(/\bp\b\s*\{/g, "#preview p {")
+        .replace(/\bpre\b\s*\{/g, "#preview pre {")
+        .replace(/\bcode\b\s*\{/g, "#preview code {")
+        .replace(/\bpre code\b/g, "#preview pre code")
+        .replace(/\bblockquote\b/g, "#preview blockquote")
+        .replace(/\btable\b/g, "#preview table")
+        .replace(/\bul\b/g, "#preview ul")
+        .replace(/\bol\b/g, "#preview ol")
+        .replace(/\bli\b/g, "#preview li")
+        .replace(/\bhr\b\s*\{/g, "#preview hr {")
+        .replace(/\ba\b\s*\{/g, "#preview a {")
+        .replace(/\bimg\b\s*\{/g, "#preview img {")
+        .replace(/\bstrong\b\s*\{/g, "#preview strong {")
+        .replace(/\bem\b\s*\{/g, "#preview em {");
+      style.textContent = scoped;
+    }
+
+    // ── File Operations ──
+    async function loadFiles() {
+      try {
+        const res = await fetch("/api/files");
+        const files = await res.json();
+        renderFileList(files);
+        if (files.length > 0 && !currentFile) {
+          openFile(files[0].name);
+        }
+      } catch (e) {
+        toast("Failed to load files", "error");
+      }
+    }
+
+    function renderFileList(files) {
+      const list = document.getElementById("fileList");
+      if (files.length === 0) {
+        list.innerHTML = '<div class="empty-state" style="padding:24px"><p>No markdown files yet.</p></div>';
+        return;
+      }
+      list.innerHTML = files.map(f => {
+        const sizeKB = (f.size / 1024).toFixed(1);
+        const active = f.name === currentFile ? "active" : "";
+        return `
+          <div class="file-item ${active}" onclick="openFile('${escapeAttr(f.name)}')" title="${escapeAttr(f.name)}">
+            <span class="file-item-icon">📄</span>
+            <span class="file-item-name">${escapeHtml(f.name)}</span>
+            <span class="file-item-size">${sizeKB} KB</span>
+            <button class="file-item-delete" onclick="event.stopPropagation(); deleteFile('${escapeAttr(f.name)}')" title="Delete">🗑️</button>
+          </div>`;
+      }).join("");
+    }
+
+    async function openFile(name) {
+      if (isModified && currentFile) {
+        if (!confirm("You have unsaved changes. Discard them?")) return;
+      }
+      try {
+        const res = await fetch("/api/files/" + encodeURIComponent(name));
+        if (!res.ok) throw new Error("File not found");
+        const data = await res.json();
+
+        currentFile = name;
+        document.getElementById("editor").value = data.content;
+        document.getElementById("fileName").textContent = name;
+        isModified = false;
+        updateSaveIndicator();
+        updatePreview();
+        updateStats();
+        refreshFileListHighlight();
+      } catch (e) {
+        toast("Failed to open file", "error");
+      }
+    }
+
+    async function saveFile() {
+      if (!currentFile) return;
+      const content = document.getElementById("editor").value;
+
+      updateSaveIndicator("saving");
+      try {
+        const res = await fetch("/api/files/" + encodeURIComponent(currentFile), {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content }),
+        });
+        if (!res.ok) throw new Error("Save failed");
+
+        isModified = false;
+        updateSaveIndicator();
+        toast("File saved", "success");
+      } catch (e) {
+        updateSaveIndicator();
+        toast("Failed to save file", "error");
+      }
+    }
+
+    async function deleteFile(name) {
+      if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+      try {
+        const res = await fetch("/api/files/" + encodeURIComponent(name), { method: "DELETE" });
+        if (!res.ok) throw new Error("Delete failed");
+
+        if (currentFile === name) {
+          currentFile = null;
+          document.getElementById("editor").value = "";
+          document.getElementById("fileName").textContent = "Notes Editor";
+          document.getElementById("preview").innerHTML = '<div class="empty-state"><div class="icon">📄</div><h3>No file open</h3></div>';
+        }
+        toast("File deleted", "success");
+        await loadFiles();
+      } catch (e) {
+        toast("Failed to delete file", "error");
+      }
+    }
+
+    function showNewFileModal() {
+      document.getElementById("newFileModal").classList.remove("hidden");
+      const input = document.getElementById("newFileName");
+      input.value = "";
+      input.focus();
+    }
+
+    function hideNewFileModal() {
+      document.getElementById("newFileModal").classList.add("hidden");
+    }
+
+    async function createFile() {
+      let name = document.getElementById("newFileName").value.trim();
+      if (!name) return;
+      if (!name.endsWith(".md")) name += ".md";
+
+      try {
+        const res = await fetch("/api/files", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name }),
+        });
+        if (!res.ok) {
+          const data = await res.json();
+          throw new Error(data.error || "Create failed");
+        }
+
+        hideNewFileModal();
+        isModified = false;
+        currentFile = null;
+        await loadFiles();
+        await openFile(name);
+        toast("File created", "success");
+      } catch (e) {
+        toast(e.message, "error");
+      }
+    }
+
+    // ── PDF Export ──
+    async function exportPdf() {
+      if (!currentFile) return;
+
+      if (isModified) await saveFile();
+
+      const overlay = document.getElementById("loadingOverlay");
+      overlay.classList.remove("hidden");
+
+      try {
+        const res = await fetch("/api/export/" + encodeURIComponent(currentFile), { method: "POST" });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Export failed");
+
+        // Trigger download
+        const a = document.createElement("a");
+        a.href = "/api/pdf/" + encodeURIComponent(data.pdf);
+        a.download = data.pdf;
+        a.click();
+        toast("PDF exported successfully", "success");
+      } catch (e) {
+        toast("PDF export failed: " + e.message, "error");
+      } finally {
+        overlay.classList.add("hidden");
+      }
+    }
+
+    // ── Editor Setup ──
+    function setupEditor() {
+      const editor = document.getElementById("editor");
+
+      editor.addEventListener("input", () => {
+        isModified = true;
+        updateSaveIndicator();
+        debouncedUpdatePreview();
+        updateStats();
+
+        // Auto-save after inactivity
+        clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(() => {
+          if (isModified && currentFile) saveFile();
+        }, AUTO_SAVE_DELAY);
+      });
+
+      // Tab key inserts spaces
+      editor.addEventListener("keydown", (e) => {
+        if (e.key === "Tab") {
+          e.preventDefault();
+          const start = editor.selectionStart;
+          const end = editor.selectionEnd;
+          editor.value = editor.value.substring(0, start) + "  " + editor.value.substring(end);
+          editor.selectionStart = editor.selectionEnd = start + 2;
+          editor.dispatchEvent(new Event("input"));
+        }
+      });
+
+      // Scroll sync
+      editor.addEventListener("scroll", () => {
+        const preview = document.querySelector(".preview-wrapper");
+        if (!preview) return;
+        const pct = editor.scrollTop / (editor.scrollHeight - editor.clientHeight || 1);
+        preview.scrollTop = pct * (preview.scrollHeight - preview.clientHeight || 1);
+      });
+    }
+
+    // ── Live Preview ──
+    function updatePreview() {
+      const content = document.getElementById("editor").value;
+      const preview = document.getElementById("preview");
+
+      if (!content.trim()) {
+        preview.innerHTML = '<div class="empty-state"><div class="icon">✍️</div><h3>Start typing</h3><p>Your markdown will render here in real time.</p></div>';
+        return;
+      }
+
+      if (typeof marked !== "undefined") {
+        preview.innerHTML = marked.parse(content);
+      } else {
+        // Fallback: show raw text
+        preview.innerHTML = "<pre>" + escapeHtml(content) + "</pre>";
+      }
+    }
+
+    function debouncedUpdatePreview() {
+      clearTimeout(updateTimer);
+      updateTimer = setTimeout(updatePreview, PREVIEW_DEBOUNCE);
+    }
+
+    // ── Stats ──
+    function updateStats() {
+      const text = document.getElementById("editor").value;
+      const lines = text ? text.split("\n").length : 0;
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      const chars = text.length;
+
+      document.getElementById("statusLines").textContent = "Lines: " + lines;
+      document.getElementById("statusWords").textContent = "Words: " + words;
+      document.getElementById("statusChars").textContent = "Chars: " + chars;
+    }
+
+    // ── Save Indicator ──
+    function updateSaveIndicator(state) {
+      const el = document.getElementById("saveIndicator");
+      if (state === "saving") {
+        el.className = "save-indicator saving";
+        el.textContent = "Saving...";
+      } else if (isModified) {
+        el.className = "save-indicator unsaved";
+        el.textContent = "Unsaved";
+      } else {
+        el.className = "save-indicator saved";
+        el.textContent = "Saved";
+      }
+    }
+
+    function refreshFileListHighlight() {
+      document.querySelectorAll(".file-item").forEach((item) => {
+        const fname = item.getAttribute("title");
+        item.classList.toggle("active", fname === currentFile);
+      });
+    }
+
+    // ── Sidebar ──
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("collapsed");
+    }
+
+    // ── Resizable Divider ──
+    function setupDivider() {
+      const divider = document.getElementById("divider");
+      let isResizing = false;
+
+      divider.addEventListener("mousedown", (e) => {
+        isResizing = true;
+        divider.classList.add("active");
+        document.body.style.cursor = "col-resize";
+        document.body.style.userSelect = "none";
+        e.preventDefault();
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (!isResizing) return;
+        const main = document.getElementById("mainArea");
+        const rect = main.getBoundingClientRect();
+        const pct = ((e.clientX - rect.left) / rect.width) * 100;
+        const clamped = Math.max(20, Math.min(80, pct));
+        document.getElementById("editorPane").style.flex = "0 0 " + clamped + "%";
+        document.getElementById("previewPane").style.flex = "0 0 " + (100 - clamped) + "%";
+      });
+
+      document.addEventListener("mouseup", () => {
+        if (isResizing) {
+          isResizing = false;
+          divider.classList.remove("active");
+          document.body.style.cursor = "";
+          document.body.style.userSelect = "";
+        }
+      });
+    }
+
+    // ── Keyboard Shortcuts ──
+    function setupKeyboard() {
+      document.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+          e.preventDefault();
+          saveFile();
+        }
+      });
+
+      document.getElementById("newFileName").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") createFile();
+        if (e.key === "Escape") hideNewFileModal();
+      });
+    }
+
+    // ── Utilities ──
+    function toast(message, type = "info") {
+      const container = document.getElementById("toastContainer");
+      const el = document.createElement("div");
+      el.className = "toast " + type;
+      el.innerHTML = (type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️") + " " + escapeHtml(message);
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 3000);
+    }
+
+    function escapeHtml(str) {
+      const d = document.createElement("div");
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    function escapeAttr(str) {
+      return str.replace(/&/g, "&amp;").replace(/'/g, "&#39;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+  </script>
+</body>
+</html>
