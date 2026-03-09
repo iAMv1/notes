@@ -72,9 +72,9 @@ const CSS = `
     color: #2c3e50;
   }
   h3 { font-size: 14pt; color: #34495e; }
-  h4 { font-size: 13pt; color: #34495e; font-style: italic; }
-  h5 { font-size: 12pt; color: #555; }
-  h6 { font-size: 11pt; color: #777; text-transform: uppercase; letter-spacing: 0.5px; }
+  h4 { font-size: 12pt; color: #34495e; font-style: italic; }
+  h5 { font-size: 11pt; color: #555; }
+  h6 { font-size: 10pt; color: #777; text-transform: uppercase; letter-spacing: 0.5px; }
 
   /* ── Inline Code ── */
   code {
@@ -82,8 +82,8 @@ const CSS = `
     border: 1px solid #d6dce4;
     border-radius: 3px;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    font-size: 8.5pt;
-    padding: 1pt 4pt;
+    font-size: 7.5pt;
+    padding: 1pt 3pt;
     color: #476582;
   }
 
