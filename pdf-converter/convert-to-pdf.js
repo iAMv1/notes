@@ -41,7 +41,7 @@ const CSS = `
     print-color-adjust: exact;
   }
   p {
-    margin: 0 0 12pt 0;
+    margin: 0 0 10pt 0;
     text-align: justify;
     orphans: 3;
     widows: 3;
@@ -53,28 +53,28 @@ const CSS = `
     color: #111;
     page-break-after: avoid;
     break-after: avoid;
-    margin-top: 28pt;
-    margin-bottom: 10pt;
+    margin-top: 18pt;
+    margin-bottom: 8pt;
     line-height: 1.3;
   }
   h1 {
-    font-size: 22pt;
-    padding-bottom: 6pt;
-    border-bottom: 2.5px solid #2c3e50;
+    font-size: 16pt;
+    padding-bottom: 4pt;
+    border-bottom: 2px solid #2c3e50;
     margin-top: 0;
-    margin-bottom: 16pt;
+    margin-bottom: 10pt;
     letter-spacing: -0.3px;
   }
   h2 {
-    font-size: 17pt;
-    padding-bottom: 4pt;
+    font-size: 15pt;
+    padding-bottom: 3pt;
     border-bottom: 1.5px solid #bdc3c7;
     color: #2c3e50;
   }
   h3 { font-size: 14pt; color: #34495e; }
-  h4 { font-size: 12pt; color: #34495e; font-style: italic; }
-  h5 { font-size: 11pt; color: #555; }
-  h6 { font-size: 10pt; color: #777; text-transform: uppercase; letter-spacing: 0.5px; }
+  h4 { font-size: 13pt; color: #34495e; font-style: italic; }
+  h5 { font-size: 12pt; color: #555; }
+  h6 { font-size: 11pt; color: #777; text-transform: uppercase; letter-spacing: 0.5px; }
 
   /* ── Inline Code ── */
   code {
@@ -82,9 +82,9 @@ const CSS = `
     border: 1px solid #d6dce4;
     border-radius: 3px;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    font-size: 9pt;
+    font-size: 8.5pt;
     padding: 1pt 4pt;
-    color: #c7254e;
+    color: #476582;
   }
 
   /* ── Code Blocks ── */
@@ -92,11 +92,11 @@ const CSS = `
     background-color: #f7f9fb;
     border: 1px solid #e1e4e8;
     border-radius: 6px;
-    font-size: 8.5pt;
-    line-height: 1.5;
+    font-size: 8pt;
+    line-height: 1.45;
     overflow: auto;
-    padding: 12pt 14pt;
-    margin: 8pt 0 14pt 0;
+    padding: 8pt 10pt;
+    margin: 6pt 0 10pt 0;
     page-break-inside: avoid;
     break-inside: avoid;
   }
@@ -113,7 +113,7 @@ const CSS = `
     border-left: 4px solid #3498db;
     background-color: #f0f7fd;
     color: #2c3e50;
-    margin: 10pt 0;
+    margin: 8pt 0;
     padding: 8pt 14pt;
     border-radius: 0 4px 4px 0;
     page-break-inside: avoid;
@@ -125,7 +125,7 @@ const CSS = `
   table {
     border-collapse: collapse;
     width: 100%;
-    margin: 12pt 0 16pt 0;
+    margin: 8pt 0 12pt 0;
     font-size: 9.5pt;
     page-break-inside: auto;
     break-inside: auto;
@@ -157,7 +157,7 @@ const CSS = `
 
   /* ── Lists ── */
   ul, ol {
-    margin: 6pt 0 12pt 0;
+    margin: 4pt 0 10pt 0;
     padding-left: 22pt;
   }
   li {
@@ -171,7 +171,7 @@ const CSS = `
   hr {
     border: none;
     border-top: 1.5px solid #dce1e6;
-    margin: 24pt 0;
+    margin: 16pt 0;
   }
 
   /* ── Links ── */
@@ -186,7 +186,7 @@ const CSS = `
     max-width: 100%;
     height: auto;
     display: block;
-    margin: 14pt auto;
+    margin: 10pt auto;
     border-radius: 4px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   }
@@ -198,7 +198,7 @@ const CSS = `
   /* ── Mermaid Diagrams ── */
   .mermaid-diagram {
     text-align: center;
-    margin: 16pt 0;
+    margin: 12pt 0;
     page-break-inside: avoid;
     break-inside: avoid;
   }
