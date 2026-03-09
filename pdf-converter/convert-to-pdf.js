@@ -223,10 +223,6 @@ const DEFAULT_CSS = `
   pre, blockquote, table, img, .mermaid-diagram { page-break-inside: avoid; }
 `;
 
-// CSS is loaded fresh from the file on each access so that live edits
-// in the web editor are immediately reflected in previews and exports.
-const CSS = loadCSS();
-
 const MERMAID_BLOCK_REGEX = /```mermaid\n([\s\S]*?)```/g;
 
 /**

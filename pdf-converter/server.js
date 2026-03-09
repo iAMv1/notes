@@ -163,6 +163,9 @@ app.put("/api/styles", (req, res) => {
   if (typeof css !== "string") {
     return res.status(400).json({ error: "CSS must be a string" });
   }
+  if (css.length > 500 * 1024) {
+    return res.status(400).json({ error: "CSS too large (max 500 KB)" });
+  }
   try {
     fs.writeFileSync(CSS_FILE_PATH, css, "utf-8");
     res.json({ success: true });
