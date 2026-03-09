@@ -36,6 +36,25 @@ After any push that changes a `.md` file in `notes/`, the workflow runs and the 
 
 ---
 
+## 🎨 Customizing PDF Formatting
+
+The styles used for PDF generation live in **[`pdf-converter/pdf-styles.css`](pdf-converter/pdf-styles.css)**.
+
+### Edit directly on GitHub (no clone needed)
+
+1. Open [`pdf-converter/pdf-styles.css`](pdf-converter/pdf-styles.css) in this repository.
+2. Click the ✏️ **Edit** pencil icon.
+3. Make your CSS changes (fonts, colors, spacing, etc.).
+4. Commit the change to `main`.
+
+The GitHub Actions workflow will detect the style change and **automatically re-generate all PDFs** with the new formatting.
+
+### Edit via the web editor (local)
+
+If you run the editor locally (`npm run editor`), click the **🎨 Styles** button in the toolbar to open the built-in CSS editor. Changes are saved to `pdf-styles.css` and immediately reflected in the live preview.
+
+---
+
 ## 🖥️ Local Setup (optional)
 
 If you want to generate PDFs on your own machine:

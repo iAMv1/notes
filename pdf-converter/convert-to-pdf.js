@@ -27,7 +27,21 @@ const CHROME_ARGS = [
   "--disable-breakpad",
 ];
 
-const CSS = `
+const CSS_FILE_PATH = path.join(__dirname, "pdf-styles.css");
+
+/**
+ * Load CSS from the external pdf-styles.css file.
+ * Falls back to the inline default if the file is missing.
+ */
+function loadCSS() {
+  try {
+    return fs.readFileSync(CSS_FILE_PATH, "utf-8");
+  } catch {
+    return DEFAULT_CSS;
+  }
+}
+
+const DEFAULT_CSS = `
   /* ── Base Typography ── */
   body {
     font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
@@ -323,7 +337,7 @@ async function convertFile(inputPath) {
   const pdf = await mdToPdf(
     { content: processedMarkdown },
     {
-      css: CSS,
+      css: loadCSS(),
       pdf_options: {
         format: "A4",
         margin: { top: "20mm", bottom: "24mm", left: "20mm", right: "20mm" },
@@ -398,4 +412,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { CSS, convertFile, convertAll };
+module.exports = { get CSS() { return loadCSS(); }, CSS_FILE_PATH, convertFile, convertAll };
