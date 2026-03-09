@@ -1190,12 +1190,11 @@ Socket programming enables communication between applications running on differe
 
 ```mermaid
 flowchart LR
-    A[Client] --> B[Socket: IP, Port]
-    C[Server] --> D[ServerSocket: Port]
-    B --> C[Connect]
+    A[Client] --> B[Client Socket]
+    B -->|IP + Port| C[Server]
+    C --> D[ServerSocket on Port]
     D --> E[Communication Socket]
-    E -.-> B[Data Exchange]
-    B -.-> E[Data Exchange]
+    E <-.->|Data Exchange| B
 ```
 
 ### Key Classes
@@ -1648,14 +1647,12 @@ An Entity Bean represents persistent business data stored in a database. It mana
 
 ```mermaid
 flowchart LR
-    A[Client] --> B[EJB Container]
+    A[Client] -->|Request| B[EJB Container]
     B --> C[Entity Bean]
-    C --> D[Database]
-    D --> C[Persistence]
-    C --> B[Return Data]
-    B --> A[Response]
-    
-    C --CRUD Operations--> D
+    C -->|CRUD Operations| D[Database]
+    D -->|Persistence| C
+    C -->|Return Data| B
+    B -->|Response| A
 ```
 
 ### Key Takeaways

@@ -238,14 +238,34 @@ async function renderMermaidToSvg(mermaidBlocks) {
   await page.evaluate(
     'mermaid.initialize({ startOnLoad: false, theme: "default" })'
   );
-  await page.evaluate('mermaid.run({ querySelector: ".mermaid" })');
 
-  const svgs = await page.evaluate(
-    'Array.from(document.querySelectorAll(".mermaid")).map(el => el.innerHTML)'
-  );
+  // Run mermaid and collect per-diagram errors so a single bad diagram
+  // doesn't abort the entire file conversion.
+  const results = await page.evaluate(async () => {
+    const elements = Array.from(document.querySelectorAll(".mermaid"));
+    const out = [];
+    for (const el of elements) {
+      try {
+        await mermaid.run({ nodes: [el] });
+        out.push({ svg: el.innerHTML, error: null });
+      } catch (err) {
+        const msg = (err?.message ?? String(err)) || "Unknown mermaid error";
+        out.push({ svg: null, error: msg });
+      }
+    }
+    return out;
+  });
 
   await browser.close();
-  return svgs;
+
+  return results.map((r, i) => {
+    if (r.error) {
+      console.warn(`  ⚠️  Diagram ${i + 1} failed to render: ${r.error}`);
+      // Return a placeholder so the PDF is still generated
+      return `<p style="color:#c0392b;border:1px solid #c0392b;padding:8px;border-radius:4px;">⚠️ Diagram ${i + 1} could not be rendered: ${r.error}</p>`;
+    }
+    return r.svg;
+  });
 }
 
 function escapeHtml(str) {
@@ -371,7 +391,9 @@ async function main() {
 
 if (require.main === module) {
   main().catch((err) => {
-    console.error("Conversion failed:", err.message);
+    const message = (err instanceof Error) ? err.message : String(err);
+    console.error("Conversion failed:", message);
+    if (err && err.stack) console.error(err.stack);
     process.exit(1);
   });
 }
