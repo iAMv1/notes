@@ -1757,16 +1757,15 @@ The Servlet interface defines the contract that all servlets must implement. It 
 
 ```mermaid
 flowchart TD
-    A[Load Servlet Class] --> B[Create Instance]
-    B --> C[init: Called]
-    C --> D{Ready State}
-    D --> E[service: Called]
+    A[Load Servlet Class] --> B[Create Servlet Instance]
+    B --> C[init() Called]
+    C --> D{Servlet Ready}
+
+    D -- Client Request --> E[service() Called]
     E --> D
-    D --> F[destroy: Called]
-    F --> G[End]
-    
-    D --Request--> E
-    D --Destroy--> F
+
+    D -- Server Shutdown / Remove Servlet --> F[destroy() Called]
+    F --> G[Servlet Ends]
 ```
 
 ### Creating Servlets - Three Ways
