@@ -1,43 +1,68 @@
 # notes
 
-## Download as PDF
+## 📄 PDF Notes
 
-Every time a markdown file is updated on the `main` branch, a GitHub Actions workflow automatically converts all notes to styled PDFs with rendered Mermaid diagrams.
+Every time a Markdown file in the `notes/` folder is pushed to the `main` branch, a GitHub Actions workflow automatically converts it to a styled PDF (with rendered Mermaid diagrams) and commits the result back to this repository.
 
-### Getting the PDFs
+### Where are the PDFs stored?
 
-1. Go to the **[Actions](../../actions)** tab of this repository
-2. Click the latest **Convert Markdown to PDF** workflow run
-3. Download the **pdf-notes** artifact from the bottom of the run page
+Generated PDFs live in the **[`notes/output/`](notes/output/)** folder of this repository.  
+After any push that changes a `.md` file in `notes/`, the workflow runs and the updated PDF appears there within a few minutes.
 
-You can also trigger a conversion manually from the Actions tab using the **Run workflow** button.
+### How to access a PDF
 
-### Local Setup (optional)
+**On GitHub:**
+1. Open the **[`notes/output/`](notes/output/)** folder in this repository.
+2. Click the PDF file you want (e.g. `ajp.pdf`).
+3. Click **Download** (or the download icon) to save it.
 
-If you prefer to generate PDFs locally:
+**Direct download links** (once a PDF has been generated at least once):
 
-#### Prerequisites
+| Note | PDF |
+|------|-----|
+| `ajp.md` | [`notes/output/ajp.pdf`](notes/output/ajp.pdf) |
+| `ajp12.md` | [`notes/output/ajp12.pdf`](notes/output/ajp12.pdf) |
+| `pme.md` | [`notes/output/pme.pdf`](notes/output/pme.pdf) |
+| `pme12.md` | [`notes/output/pme12.pdf`](notes/output/pme12.pdf) |
 
-- [Node.js](https://nodejs.org/) (v16 or later)
+### Keeping PDFs up to date
 
-#### Install
+| Trigger | What happens |
+|---------|-------------|
+| **Push to `main`** (any `.md` file in `notes/`) | Only the changed files are re-converted and committed automatically. |
+| **Manual** — [Run workflow](../../actions/workflows/convert-to-pdf.yml) → **Run workflow** button | All Markdown files are converted and committed. Use this to regenerate everything at once. |
+
+> **No folder to create.** The `notes/output/` folder already exists in the repo. The workflow writes PDFs there automatically — you don't need to do anything.
+
+---
+
+## 🖥️ Local Setup (optional)
+
+If you want to generate PDFs on your own machine:
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) v18 or later
+
+### Install
 
 ```bash
+cd pdf-converter
 npm install
 ```
 
-#### Usage
-
-Convert a specific file:
+### Convert a specific file
 
 ```bash
-npm run convert -- ajp.md
+# from inside pdf-converter/
+npm run convert -- ../notes/ajp.md
 ```
 
-Convert all markdown files:
+The PDF is saved to `notes/output/ajp.pdf` (a sibling `output/` folder next to the source `.md` file).
+
+### Convert all notes at once
 
 ```bash
-npm run convert:all
+# from inside pdf-converter/
+npm run convert:all -- ../notes
 ```
-
-PDFs are saved to the `output/` directory.
