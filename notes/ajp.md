@@ -1,11 +1,4 @@
-
 # 📚 Advanced Java Programming — Comprehensive Study Notes
-
-> **Generated from:** Complete AJP.pdf (128 pages), AJP syllabus.pdf (2 pages)
-> **Syllabus Coverage:** 100% (Unit 1 & Unit 2)
-> **Total Source Pages Processed:** 92 pages (Unit 1, Unit 2, Mid Sem)
-> **Generation Date:** 2026-03-07
-
 
 ## 📋 Table of Contents
 
@@ -33,16 +26,12 @@
   - [Topic 2.11: Session Tracking](#topic-211-session-tracking)
   - [Topic 2.12: Cookies](#topic-212-cookies)
 - [📊 Coverage Statistics](#-coverage-statistics)
-- [📚 Source Index](#-source-index)
 
 ---
 
 # Unit 1: Introduction to Java, Inheritance, Exception Handling, Multithreading, Applet Programming, Connecting to a Server, Implementing Servers, Making URL Connections, Socket Programming
 
 ## Topic 1.1: Introduction to Java
-
-**📍 Syllabus Reference:** Unit 1 → Topic 1.1
-**📄 Sources:** Complete AJP.pdf (Pages 1-10)
 
 ### Overview
 
@@ -51,13 +40,10 @@ Java is a high-level, class-based, object-oriented programming language develope
 ### Key Definitions
 
 > **Java Virtual Machine (JVM):** A virtual machine that enables Java bytecode to be executed on any platform. It acts as an abstract computer that runs Java bytecode.
-> *— Source: Complete AJP.pdf, Page 5*
 
 > **Bytecode:** Platform-independent compiled Java code with .class extension. It is the intermediate representation of Java code that the JVM interprets.
-> *— Source: Complete AJP.pdf, Page 5*
 
 > **WORA (Write Once, Run Anywhere):** The principle that Java code written on one platform can run on any other platform that has a JVM without recompilation.
-> *— Source: Complete AJP.pdf, Page 5*
 
 ### Java Key Features
 
@@ -151,9 +137,6 @@ All Java components require names. Rules:
 
 ## Topic 1.2: Inheritance
 
-**📍 Syllabus Reference:** Unit 1 → Topic 1.2
-**📄 Sources:** Complete AJP.pdf (Pages 11-30)
-
 ### Overview
 
 Inheritance is a fundamental concept in object-oriented programming (OOP) that allows a new class to inherit properties and behavior from an existing class. In Java, inheritance enables code reuse and establishes relationships between classes through a parent-child hierarchy.
@@ -161,16 +144,12 @@ Inheritance is a fundamental concept in object-oriented programming (OOP) that a
 ### Key Definitions
 
 > **Inheritance:** A mechanism where a class acquires the properties and behaviors of another class, promoting code reuse and establishing "is-a" relationships.
-> *— Source: Complete AJP.pdf, Page 11*
 
 > **Superclass (Parent Class):** The class whose properties and methods are inherited by another class.
-> *— Source: Complete AJP.pdf, Page 11*
 
 > **Subclass (Child Class):** The class that inherits properties and methods from another class.
-> *— Source: Complete AJP.pdf, Page 11*
 
 > **Polymorphism:** The ability of objects to take on many forms; allows writing code that deals with general object types.
-> *— Source: Complete AJP.pdf, Page 12*
 
 ### Syntax
 
@@ -285,9 +264,6 @@ public class Main {
 
 ## Topic 1.3: Exception Handling
 
-**📍 Syllabus Reference:** Unit 1 → Topic 1.3
-**📄 Sources:** Complete AJP.pdf (Pages 31-50)
-
 ### Overview
 
 Exception handling is a mechanism provided by Java to handle runtime errors, known as exceptions, in a structured and graceful manner. By handling exceptions effectively, developers can prevent unexpected program terminations and provide meaningful feedback to users.
@@ -295,13 +271,10 @@ Exception handling is a mechanism provided by Java to handle runtime errors, kno
 ### Key Definitions
 
 > **Exception:** An event that disrupts the normal flow of the program's execution. It is an unwanted event that occurs during program execution.
-> *— Source: Complete AJP.pdf, Page 31*
 
 > **Throwable:** The root class of the exception hierarchy in Java. All exceptions inherit from this class.
-> *— Source: Complete AJP.pdf, Page 31*
 
 > **try-catch:** A block of code where exceptions are handled. The try block contains code that might throw an exception, and catch blocks handle specific exception types.
-> *— Source: Complete AJP.pdf, Page 32*
 
 ### Exception Hierarchy
 
@@ -464,9 +437,6 @@ public class NumberUtils {
 
 ## Topic 1.4: Multithreading
 
-**📍 Syllabus Reference:** Unit 1 → Topic 1.4
-**📄 Sources:** Complete AJP.pdf (Pages 51-75)
-
 ### Overview
 
 Multithreading is a programming concept that allows multiple threads to execute concurrently within a single process. In Java, multithreading enables developers to create applications that can perform multiple tasks simultaneously, improving efficiency and responsiveness.
@@ -474,13 +444,10 @@ Multithreading is a programming concept that allows multiple threads to execute 
 ### Key Definitions
 
 > **Thread:** A lightweight subprocess, the smallest unit of processing that can be scheduled by the operating system. A thread is a single sequential flow of control within a program.
-> *— Source: Complete AJP.pdf, Page 51*
 
 > **Process:** An independent program execution that has its own memory space. A process can contain multiple threads.
-> *— Source: Complete AJP.pdf, Page 51*
 
 > **Runnable Interface:** An interface that provides a way to create a thread without extending the Thread class.
-> *— Source: Complete AJP.pdf, Page 52*
 
 ### Thread vs Process
 
@@ -689,9 +656,6 @@ class ImageDownloadTask implements Runnable {
 
 ## Topic 1.5: Applet Programming
 
-**📍 Syllabus Reference:** Unit 1 → Topic 1.5
-**📄 Sources:** Complete AJP.pdf (Pages 76-90)
-
 ### Overview
 
 Applet programming in Java enables developers to create dynamic and interactive content that can be embedded within web pages. Java applets provide a platform-independent way to enhance web pages with features such as animations, games, and interactive forms.
@@ -699,10 +663,8 @@ Applet programming in Java enables developers to create dynamic and interactive 
 ### Key Definitions
 
 > **Applet:** A Java program that runs within a web browser. It is a special Java program embedded in an HTML page.
-> *— Source: Complete AJP.pdf, Page 76*
 
 > **Applet Lifecycle:** The sequence of methods called from initialization to destruction of an applet.
-> *— Source: Complete AJP.pdf, Page 76*
 
 ### Applet Lifecycle Methods
 
@@ -865,9 +827,6 @@ public class AnimationApplet extends Applet implements Runnable {
 
 ## Topic 1.6: Connecting to a Server
 
-**📍 Syllabus Reference:** Unit 1 → Topic 1.6
-**📄 Sources:** Complete AJP.pdf (Pages 91-100)
-
 ### Overview
 
 Connecting to a server in Java typically involves network communication, where a client application communicates with a server over a network protocol such as TCP/IP. Java provides the Socket class for this purpose.
@@ -975,9 +934,6 @@ public class Server {
 ---
 
 ## Topic 1.7: Implementing Servers
-
-**📍 Syllabus Reference:** Unit 1 → Topic 1.7
-**📄 Sources:** Complete AJP.pdf (Pages 101-110)
 
 ### Overview
 
@@ -1090,9 +1046,6 @@ class ClientHandler extends Thread {
 
 ## Topic 1.8: Making URL Connections
 
-**📍 Syllabus Reference:** Unit 1 → Topic 1.8
-**📄 Sources:** Complete AJP.pdf (Pages 111-115)
-
 ### Overview
 
 Java provides classes for making URL connections and retrieving web resources. The URLConnection class represents a connection to a URL, while HttpURLConnection provides HTTP-specific functionality.
@@ -1100,10 +1053,8 @@ Java provides classes for making URL connections and retrieving web resources. T
 ### Key Definitions
 
 > **URL (Uniform Resource Locator):** A reference to a web resource that specifies its location on a computer network.
-> *— Source: Complete AJP.pdf, Page 111*
 
 > **URLConnection:** An abstract class that represents a connection to a URL. It provides methods for reading header fields and managing the connection.
-> *— Source: Complete AJP.pdf, Page 111*
 
 ### URL Structure
 
@@ -1171,9 +1122,6 @@ public class URLReader {
 
 ## Topic 1.9: Socket Programming
 
-**📍 Syllabus Reference:** Unit 1 → Topic 1.9
-**📄 Sources:** Complete AJP.pdf (Pages 116-128)
-
 ### Overview
 
 Socket programming enables communication between applications running on different machines over a network. A socket is a combination of IP address and port number that identifies a specific endpoint for communication.
@@ -1181,10 +1129,8 @@ Socket programming enables communication between applications running on differe
 ### Key Definitions
 
 > **Socket:** A combination of IP address and port number used for network communication. It is the endpoint of a bidirectional communication link.
-> *— Source: Complete AJP.pdf, Page 116*
 
 > **ServerSocket:** A socket that listens for incoming client connections on a specific port.
-> *— Source: Complete AJP.pdf, Page 116*
 
 ### Visual: Socket Connection Process
 
@@ -1278,9 +1224,6 @@ public class Server {
 
 ## Topic 2.1: JavaBean
 
-**📍 Syllabus Reference:** Unit 2 → Topic 2.1
-**📄 Sources:** Complete AJP.pdf (Unit 2, Pages 1-10)
-
 ### Overview
 
 JavaBeans are reusable software components that can be manipulated visually in a builder tool. A JavaBean is a Java class that follows specific conventions to enable visual manipulation and reuse.
@@ -1288,10 +1231,8 @@ JavaBeans are reusable software components that can be manipulated visually in a
 ### Key Definitions
 
 > **JavaBean:** A reusable software component that follows specific conventions: no-arg constructor, Serializable, and property access via getter/setter methods.
-> *— Source: Complete AJP.pdf, Unit 2 Page 2*
 
 > **Property:** A named feature of a JavaBean that can be accessed by users of the object through getter and setter methods.
-> *— Source: Complete AJP.pdf, Unit 2 Page 3*
 
 ### Requirements for a Java Bean
 
@@ -1366,9 +1307,6 @@ public class Student implements Serializable {
 
 ## Topic 2.2: Java Bean Properties
 
-**📍 Syllabus Reference:** Unit 2 → Topic 2.2
-**📄 Sources:** Complete AJP.pdf (Unit 2, Pages 11-15)
-
 ### Overview
 
 Java Bean properties define the state of a JavaBean. They can be accessed and modified through getter and setter methods.
@@ -1421,9 +1359,6 @@ public class PropertyExample {
 
 ## Topic 2.3: Types of Beans
 
-**📍 Syllabus Reference:** Unit 2 → Topic 2.3
-**📄 Sources:** Complete AJP.pdf (Unit 2, Pages 16-20)
-
 ### Overview
 
 There are various types of beans in Java enterprise applications, each serving different purposes.
@@ -1464,9 +1399,6 @@ flowchart TD
 
 ## Topic 2.4: Stateful Session Bean
 
-**📍 Syllabus Reference:** Unit 2 → Topic 2.4
-**📄 Sources:** Complete AJP.pdf (Unit 2, Pages 21-30)
-
 ### Overview
 
 A Stateful Session Bean maintains conversational state across method calls within a session. It is dedicated to a single client for the duration of a session.
@@ -1474,7 +1406,6 @@ A Stateful Session Bean maintains conversational state across method calls withi
 ### Key Definitions
 
 > **Stateful Session Bean:** A session bean that maintains conversational state with the client across multiple method calls.
-> *— Source: Complete AJP.pdf, Unit 2 Page 21*
 
 ### Characteristics
 
@@ -1540,9 +1471,6 @@ public class ShoppingCartBean implements ShoppingCart {
 
 ## Topic 2.5: Stateless Session Bean
 
-**📍 Syllabus Reference:** Unit 2 → Topic 2.5
-**📄 Sources:** Complete AJP.pdf (Unit 2, Pages 31-40)
-
 ### Overview
 
 A Stateless Session Bean does not maintain conversational state with any client. Each bean instance can be used by any client, and its state is not preserved between method invocations.
@@ -1550,7 +1478,6 @@ A Stateless Session Bean does not maintain conversational state with any client.
 ### Key Definitions
 
 > **Stateless Session Bean:** A session bean that doesn't maintain conversational state with the client. Provides better scalability.
-> *— Source: Complete AJP.pdf, Unit 2 Page 31*
 
 ### Characteristics
 
@@ -1617,9 +1544,6 @@ public class CalculatorBean implements Calculator {
 
 ## Topic 2.6: Entity Bean
 
-**📍 Syllabus Reference:** Unit 2 → Topic 2.6
-**📄 Sources:** Complete AJP.pdf (Unit 2, Pages 41-50)
-
 ### Overview
 
 An Entity Bean represents persistent business data stored in a database. It manages data that persists beyond the lifetime of a single client session and is identified by a primary key.
@@ -1627,10 +1551,8 @@ An Entity Bean represents persistent business data stored in a database. It mana
 ### Key Definitions
 
 > **Entity Bean:** A server-side component representing persistent business data stored in a database.
-> *— Source: Complete AJP.pdf, Unit 2 Page 41*
 
 > **Primary Key:** Unique identifier for entity bean instances.
-> *— Source: Complete AJP.pdf, Unit 2 Page 41*
 
 ### Entity Bean Types
 
@@ -1669,9 +1591,6 @@ flowchart LR
 
 ## Topic 2.7: Servlet Overview and Architecture
 
-**📍 Syllabus Reference:** Unit 2 → Topic 2.7
-**📄 Sources:** Complete AJP.pdf (Unit 2, Pages 51-65)
-
 ### Overview
 
 Servlets are Java programs that run on a web server and handle client requests dynamically. They provide a server-side component model for building web applications.
@@ -1679,7 +1598,6 @@ Servlets are Java programs that run on a web server and handle client requests d
 ### Key Definitions
 
 > **Servlet:** A Java program that runs on a web server, handling HTTP requests and generating dynamic responses.
-> *— Source: Complete AJP.pdf, Unit 2 Page 51*
 
 ### Servlet Architecture Components
 
@@ -1728,9 +1646,6 @@ sequenceDiagram
 
 ## Topic 2.8: Interface Servlet and the Servlet Life Cycle
 
-**📍 Syllabus Reference:** Unit 2 → Topic 2.8
-**📄 Sources:** Complete AJP.pdf (Unit 2, Pages 66-80)
-
 ### Overview
 
 The Servlet interface defines the contract that all servlets must implement. It provides three lifecycle methods and two non-lifecycle methods.
@@ -1757,15 +1672,16 @@ The Servlet interface defines the contract that all servlets must implement. It 
 
 ```mermaid
 flowchart TD
-    A[Load Servlet Class] --> B[Create Servlet Instance]
-    B --> C[init() Called]
-    C --> D{Servlet Ready}
-
-    D -- Client Request --> E[service() Called]
+    A[Load Servlet Class] --> B[Create Instance]
+    B --> C[init: Called]
+    C --> D{Ready State}
+    D --> E[service: Called]
     E --> D
-
-    D -- Server Shutdown / Remove Servlet --> F[destroy() Called]
-    F --> G[Servlet Ends]
+    D --> F[destroy: Called]
+    F --> G[End]
+    
+    D --Request--> E
+    D --Destroy--> F
 ```
 
 ### Creating Servlets - Three Ways
@@ -1806,9 +1722,6 @@ public class DemoServlet extends HttpServlet {
 ---
 
 ## Topic 2.9: Handling HTTP GET Requests
-
-**📍 Syllabus Reference:** Unit 2 → Topic 2.9
-**📄 Sources:** Complete AJP.pdf (Unit 2, Pages 81-85)
 
 ### Overview
 
@@ -1858,9 +1771,6 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
 
 ## Topic 2.10: Handling HTTP POST Requests
 
-**📍 Syllabus Reference:** Unit 2 → Topic 2.10
-**📄 Sources:** Complete AJP.pdf (Unit 2, Pages 86-90)
-
 ### Overview
 
 HTTP POST requests are used to send data to be processed to a specified resource. POST is commonly used for submitting form data.
@@ -1901,9 +1811,6 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 ---
 
 ## Topic 2.11: Session Tracking
-
-**📍 Syllabus Reference:** Unit 2 → Topic 2.11
-**📄 Sources:** Complete AJP.pdf (Unit 2, Pages 91-95)
 
 ### Overview
 
@@ -1956,9 +1863,6 @@ session.invalidate();
 ---
 
 ## Topic 2.12: Cookies
-
-**📍 Syllabus Reference:** Unit 2 → Topic 2.12
-**📄 Sources:** Complete AJP.pdf (Unit 2, Pages 96-100)
 
 ### Overview
 
@@ -2025,22 +1929,7 @@ sequenceDiagram
 | Topics Covered                     | 21 (100%)    |
 | **Unit 1 Coverage**                | 9/9 (100%)   |
 | **Unit 2 Coverage**                | 12/12 (100%) |
-| Source Documents Processed         | 2            |
-| Total Extracted Content Chunks     | 45+          |
-| Generated Diagrams                 | 15           |
 
 ---
 
-## 📚 Source Index
-
-1. **Complete AJP.pdf** - Main textbook (128 pages)
-   - Extracted: 165,385 characters
-   - Quality: 90%
-   
-2. **AJP syllabus.pdf** - Official syllabus (2 pages)
-   - Extracted: 3,361 characters (via OCR)
-   - Quality: 85%
-
----
-
-*Notes compiled from extracted course materials. Complete coverage of Unit 1 and Unit 2 topics achieved.*
+*Notes compiled for Advanced Java Unit 1 and Unit 2. Complete coverage of all topics achieved.*
