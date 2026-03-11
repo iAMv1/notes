@@ -513,12 +513,12 @@ h1, h2, h3 { color: red; }
 **Background:**
 ```css
 .container {
-    background-color: #f0f0f0;
-    background-image: url("bg.jpg");
-    background-repeat: repeat;
-    background-position: center top;
-    background-size: cover;
-    background-attachment: fixed;
+    background-color: #f0f0f0;      /* Sets the background color */
+    background-image: url("bg.jpg");  /* Sets background image URL */
+    background-repeat: repeat;        /* Repeats image horizontally and vertically */
+    background-position: center top;  /* Positions image at center horizontally, top vertically */
+    background-size: cover;           /* Scales image to cover entire container */
+    background-attachment: fixed;     /* Image stays fixed when scrolling */
     /* Shorthand - combines all background properties into one */
     background: #f0f0f0 url("bg.jpg") no-repeat center top;
 }
@@ -527,43 +527,43 @@ h1, h2, h3 { color: red; }
 **Text and Font:**
 ```css
 body {
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    font-weight: normal;
-    font-style: normal;
-    color: #333;
-    text-align: left;
-    text-decoration: none;
-    text-transform: capitalize;
-    text-indent: 30px;
-    line-height: 1.5;
-    letter-spacing: 2px;
-    word-spacing: 5px;
+    font-family: Arial, sans-serif;   /* Sets the font family */
+    font-size: 16px;                  /* Sets the font size */
+    font-weight: normal;               /* Sets font thickness (normal/bold) */
+    font-style: normal;               /* Sets font style (normal/italic) */
+    color: #333;                      /* Sets text color */
+    text-align: left;                  /* Aligns text (left/right/center/justify) */
+    text-decoration: none;            /* Decorates text (none/underline/line-through) */
+    text-transform: capitalize;       /* Transforms text (uppercase/lowercase/capitalize) */
+    text-indent: 30px;                /* Indents first line of text */
+    line-height: 1.5;                 /* Sets vertical space between lines */
+    letter-spacing: 2px;              /* Sets space between characters */
+    word-spacing: 5px;                /* Sets space between words */
 }
 ```
 
 **Borders:**
 ```css
 .box {
-    border: 2px solid #000;
-    border-width: 2px;
-    border-style: solid;
-    border-color: #000;
-    border-radius: 10px;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+    border: 2px solid #000;        /* Shorthand: width style color */
+    border-width: 2px;             /* Sets border width */
+    border-style: solid;           /* Sets border style (solid/dashed/dotted) */
+    border-color: #000;            /* Sets border color */
+    border-radius: 10px;           /* Rounds corners of border */
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);  /* Adds shadow to element */
 }
 ```
 
 **Margins and Padding:**
 ```css
 .element {
-    margin: 10px;
-    margin-top: 10px;
-    margin-right: 20px;
-    margin-bottom: 10px;
-    margin-left: 20px;
-    padding: 20px;
-    padding-top: 10px;
+    margin: 10px;              /* Space outside border (all sides) */
+    margin-top: 10px;          /* Space above element */
+    margin-right: 20px;        /* Space to right of element */
+    margin-bottom: 10px;        /* Space below element */
+    margin-left: 20px;         /* Space to left of element */
+    padding: 20px;             /* Space inside border (all sides) */
+    padding-top: 10px;         /* Space inside above content */
 }
 ```
 
@@ -604,36 +604,36 @@ body {
 .static { position: static; }
 
 .relative { 
-    position: relative; 
-    top: 20px; 
-    left: 10px; 
+    position: relative;  /* Position relative to normal position */
+    top: 20px;            /* Move down 20px from normal */
+    left: 10px;          /* Move right 10px from normal */
 }
 
 .absolute { 
-    position: absolute; 
+    position: absolute;  /* Position relative to nearest positioned ancestor */
     top: 50px; 
     left: 50px; 
 }
 
 .fixed { 
-    position: fixed; 
+    position: fixed;     /* Position relative to viewport, stays on scroll */
     top: 0; 
     right: 0; 
 }
 
 .sticky { 
-    position: sticky; 
+    position: sticky;    /* Sticks to position on scroll until boundary */
     top: 10px; 
 }
 
-/* Z-index */
+/* Z-index - controls stacking order of elements */
 .high { z-index: 10; position: relative; }
 .low { z-index: 5; position: relative; }
 
-/* Float */
+/* Float - positions element to left/right of container */
 .left { float: left; }
 .right { float: right; }
-.clear { clear: both; }
+.clear { clear: both; }  /* Clears floating elements */
 ```
 
 #### 2.6 CSS Layouts
@@ -641,11 +641,11 @@ body {
 **CSS Grid:**
 ```css
 .container {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto;
-    grid-gap: 20px;
-    grid-template-areas: 
+    display: grid;                    /* Enables grid layout */
+    grid-template-columns: 1fr 1fr 1fr;  /* Creates 3 equal columns */
+    grid-template-rows: auto;          /* Sets row heights */
+    grid-gap: 20px;                    /* Space between grid items */
+    grid-template-areas:              /* Names grid areas for layout */
         "header header header"
         "sidebar content content"
         "footer footer footer";
@@ -653,24 +653,24 @@ body {
 
 .item {
     grid-column: 1 / 3; /* Span 2 columns - from line 1 to 3 */
-    grid-row: 1 / 2;
+    grid-row: 1 / 2;    /* Span 1 row */
 }
 ```
 
 **Flexbox:**
 ```css
 .container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
+    display: flex;                 /* Enables flexbox layout */
+    flex-direction: row;          /* Direction of flex items (row/column) */
+    justify-content: space-between;  /* Aligns items along main axis */
+    align-items: center;           /* Aligns items along cross axis */
+    flex-wrap: wrap;               /* Allows items to wrap */
 }
 
 .item {
-    flex-grow: 1;
-    flex-shrink: 0;
-    flex-basis: 200px;
+    flex-grow: 1;     /* Item grows to fill available space */
+    flex-shrink: 0;   /* Item does not shrink */
+    flex-basis: 200px;  /* Initial main size of item */
     /* Shorthand: flex-grow flex-shrink flex-basis */
 }
 ```
@@ -991,7 +991,7 @@ var name = "John";          // Function-scoped, can be redeclared
 let age = 25;              // Block-scoped, can be reassigned
 const PI = 3.14159;        // Block-scoped, cannot be reassigned
 
-// Differences
+// Differences - var vs let behavior in block scope
 var x = 10;
 if (true) {
     var x = 20;  // Same variable
@@ -1061,7 +1061,7 @@ if (age >= 18) {
     console.log("Child");
 }
 
-// Ternary
+// Ternary operator - shorthand for if-else (condition ? true : false)
 var status = age >= 18 ? "Adult" : "Minor";
 ```
 
@@ -1081,34 +1081,34 @@ switch (day) {
 
 **Loops:**
 ```javascript
-// For
+// For loop - executes code a specific number of times
 for (var i = 0; i < 5; i++) {
     console.log(i);
 }
 
-// While
+// While loop - executes code while condition is true
 while (i < 5) {
     console.log(i);
     i++;
 }
 
-// Do-While
+// Do-While loop - executes at least once, then checks condition
 do {
     console.log(i);
     i++;
 } while (i < 5);
 
-// For...in (objects)
+// For...in (objects) - iterates over object keys
 for (var key in obj) {
     console.log(key + ": " + obj[key]);
 }
 
-// For...of (iterables)
+// For...of (iterables) - iterates over array values
 for (var item of arr) {
     console.log(item);
 }
 
-// forEach
+// forEach - array method to iterate with callback
 arr.forEach(function(item, index) {
     console.log(index + ": " + item);
 });
@@ -1221,37 +1221,37 @@ class Person {
 **String:**
 ```javascript
 var str = "Hello World";
-str.length;                     // 11
-str.toUpperCase();              // "HELLO WORLD"
-str.toLowerCase();              // "hello world"
-str.indexOf("World");           // 6
-str.substring(0, 5);           // "Hello"
-str.slice(-5);                 // "World"
-str.split(" ");                // ["Hello", "World"]
-str.replace("World", "PHP");   // "Hello PHP"
-str.trim();                     // Remove whitespace
+str.length;                     // Returns number of characters (11)
+str.toUpperCase();              // Converts to uppercase ("HELLO WORLD")
+str.toLowerCase();              // Converts to lowercase ("hello world")
+str.indexOf("World");           // Returns index of substring (6)
+str.substring(0, 5);           // Extracts characters from 0 to 5 ("Hello")
+str.slice(-5);                 // Extracts last 5 characters ("World")
+str.split(" ");                // Splits string into array (["Hello", "World"])
+str.replace("World", "PHP");   // Replaces substring ("Hello PHP")
+str.trim();                     // Removes whitespace from both ends
 ```
 
 **Math:**
 ```javascript
-Math.round(4.5);    // 5
-Math.floor(4.9);    // 4
-Math.ceil(4.1);     // 5
-Math.abs(-5);       // 5
-Math.max(1, 5, 3);  // 5
-Math.min(1, 5, 3);  // 1
-Math.random();       // Random 0-1
-Math.pow(2, 3);     // 8
-Math.sqrt(16);      // 4
+Math.round(4.5);    // Rounds to nearest integer (5)
+Math.floor(4.9);    // Rounds down (4)
+Math.ceil(4.1);     // Rounds up (5)
+Math.abs(-5);       // Absolute value (5)
+Math.max(1, 5, 3);  // Returns largest number (5)
+Math.min(1, 5, 3);  // Returns smallest number (1)
+Math.random();      // Returns random number between 0-1
+Math.pow(2, 3);     // Returns 2 raised to power 3 (8)
+Math.sqrt(16);      // Returns square root (4)
 ```
 
 **Date:**
 ```javascript
 var date = new Date();
-date.getFullYear();     // 2024
-date.getMonth();        // 0-11
-date.getDate();         // 1-31
-date.getHours();        // 0-23
+date.getFullYear();     // Returns 4-digit year (2024)
+date.getMonth();        // Returns month (0-11, where 0 is January)
+date.getDate();         // Returns day of month (1-31)
+date.getHours();        // Returns hour (0-23)
 date.getMinutes();      // 0-59
 date.getTime();         // Timestamp
 ```
