@@ -122,17 +122,17 @@ Every HTML document must follow a standard structure to ensure proper rendering 
 
 **Document Structure Elements:**
 
-| Element | Description |
-|---------|-------------|
-| `<!DOCTYPE html>` | Declares document type and version (HTML5) |
-| `<html>` | Root element of the document |
-| `<head>` | Contains meta-information (title, charset, styles, scripts) |
-| `<title>` | Specifies the document title shown in browser tab |
-| `<body>` | Contains visible content (text, images, links, etc.) |
-| `<meta>` | Provides metadata about the HTML document |
-| `<link>` | Defines relationship between document and external resource |
-| `<script>` | Embeds or references JavaScript |
-| `<style>` | Contains CSS styling |
+| Element           | Description                                                 |
+| ----------------- | ----------------------------------------------------------- |
+| `<!DOCTYPE html>` | Declares document type and version (HTML5)                  |
+| `<html>`          | Root element of the document                                |
+| `<head>`          | Contains meta-information (title, charset, styles, scripts) |
+| `<title>`         | Specifies the document title shown in browser tab           |
+| `<body>`          | Contains visible content (text, images, links, etc.)        |
+| `<meta>`          | Provides metadata about the HTML document                   |
+| `<link>`          | Defines relationship between document and external resource |
+| `<script>`        | Embeds or references JavaScript                             |
+| `<style>`         | Contains CSS styling                                        |
 
 #### 1.4 HTML Elements
 
@@ -480,31 +480,31 @@ selector {
 
 **Types of Selectors:**
 ```css
-/* Element Selector */
+/* Element Selector - selects all elements of a given type */
 p { color: blue; }
 
-/* Class Selector */
+/* Class Selector - selects elements with a specific class */
 .highlight { background-color: yellow; }
 
-/* ID Selector */
+/* ID Selector - selects a unique element with the specified ID */
 #header { font-size: 24px; }
 
-/* Attribute Selector */
+/* Attribute Selector - selects elements with a specific attribute */
 input[type="text"] { border: 1px solid black; }
 
-/* Descendant Selector */
+/* Descendant Selector - selects elements nested inside another element */
 ul li { list-style-type: square; }
 
-/* Child Selector */
+/* Child Selector - selects direct children of an element */
 ul > li { margin: 5px; }
 
-/* Pseudo-class */
+/* Pseudo-class - selects elements based on their state */
 a:hover { color: red; }
 
-/* Pseudo-element */
+/* Pseudo-element - styles specific parts of an element */
 p::first-line { font-weight: bold; }
 
-/* Grouping */
+/* Grouping - applies same styles to multiple selectors */
 h1, h2, h3 { color: red; }
 ```
 
@@ -519,7 +519,7 @@ h1, h2, h3 { color: red; }
     background-position: center top;
     background-size: cover;
     background-attachment: fixed;
-    /* Shorthand */
+    /* Shorthand - combines all background properties into one */
     background: #f0f0f0 url("bg.jpg") no-repeat center top;
 }
 ```
@@ -592,7 +592,7 @@ body {
     padding: 20px;
     border: 2px solid black;
     margin: 10px;
-    box-sizing: content-box; /* Default */
+    box-sizing: content-box; /* Default - width includes only content */
     /* or */
     box-sizing: border-box; /* Includes padding and border in width */
 }
@@ -652,7 +652,7 @@ body {
 }
 
 .item {
-    grid-column: 1 / 3; /* Span 2 columns */
+    grid-column: 1 / 3; /* Span 2 columns - from line 1 to 3 */
     grid-row: 1 / 2;
 }
 ```
@@ -671,7 +671,7 @@ body {
     flex-grow: 1;
     flex-shrink: 0;
     flex-basis: 200px;
-    /* Shorthand: flex: 1 0 200px; */
+    /* Shorthand: flex-grow flex-shrink flex-basis */
 }
 ```
 
@@ -717,26 +717,26 @@ body {
 
 **Media Queries (Responsive Design):**
 ```css
-/* Mobile First */
+/* Mobile First - base styles for small screens */
 .container {
     width: 100%;
 }
 
-/* Tablet */
+/* Tablet - styles for screens 768px and wider */
 @media (min-width: 768px) {
     .container {
         width: 750px;
     }
 }
 
-/* Desktop */
+/* Desktop - styles for screens 1024px and wider */
 @media (min-width: 1024px) {
     .container {
         width: 960px;
     }
 }
 
-/* Print */
+/* Print - styles for printing */
 @media print {
     body {
         font-size: 12pt;
@@ -852,15 +852,15 @@ XML Schema Definition (XSD) is a more powerful alternative to DTD for defining s
 
 #### 5.3 DTD vs XML Schema Comparison
 
-| Feature | DTD | XML Schema |
-|---------|-----|------------|
-| Syntax | Non-XML | XML |
-| Data Types | Limited | Rich data types |
-| Namespace Support | No | Yes |
-| Validation | Less expressive | More powerful |
-| Inheritance | No | Yes |
-| Modularity | Limited | High |
-| Extensibility | Less extensible | More extensible |
+| Feature           | DTD             | XML Schema      |
+| ----------------- | --------------- | --------------- |
+| Syntax            | Non-XML         | XML             |
+| Data Types        | Limited         | Rich data types |
+| Namespace Support | No              | Yes             |
+| Validation        | Less expressive | More powerful   |
+| Inheritance       | No              | Yes             |
+| Modularity        | Limited         | High            |
+| Extensibility     | Less extensible | More extensible |
 
 ---
 
@@ -931,20 +931,20 @@ DHTML is the combination of HTML, CSS, and JavaScript to create interactive and 
 #### 8.3 DOM Manipulation
 
 ```javascript
-// Create element
+// Create element - create new DOM nodes
 var p = document.createElement("p");
 p.textContent = "New paragraph";
 document.body.appendChild(p);
 
-// Modify element
+// Modify element - change content, styles, or attributes
 document.getElementById("myId").innerHTML = "<strong>New content</strong>";
 element.style.color = "blue";
 element.classList.add("active");
 
-// Remove element
+// Remove element - delete DOM nodes
 element.remove();
 
-// Event listener
+// Event listener - handle user interactions
 element.addEventListener("click", function(event) {
     console.log(event.target);
 });
@@ -962,18 +962,18 @@ element.addEventListener("click", function(event) {
 
 ### Unit I: Quick Reference Card
 
-| Concept | Syntax/Formula | Example |
-|---------|----------------|---------|
-| HTML Tag | `<tagname>` | `<p>`, `<div>` |
-| CSS Selector | `element { }` | `p { color: blue; }` |
-| Box Model | margin → border → padding → content | width includes all |
-| XML Declaration | `<?xml version="1.0"?>` | First line of XML |
-| CSS Positioning | `position: absolute` | Relative to ancestor |
-| CSS Grid | `display: grid` | 2D layout |
-| Flexbox | `display: flex` | 1D layout |
-| DOM | Tree structure | getElementById |
-| DTD | Document Type Definition | XML validation |
-| XHTML | Strict HTML | XML syntax |
+| Concept         | Syntax/Formula                      | Example              |
+| --------------- | ----------------------------------- | -------------------- |
+| HTML Tag        | `<tagname>`                         | `<p>`, `<div>`       |
+| CSS Selector    | `element { }`                       | `p { color: blue; }` |
+| Box Model       | margin → border → padding → content | width includes all   |
+| XML Declaration | `<?xml version="1.0"?>`             | First line of XML    |
+| CSS Positioning | `position: absolute`                | Relative to ancestor |
+| CSS Grid        | `display: grid`                     | 2D layout            |
+| Flexbox         | `display: flex`                     | 1D layout            |
+| DOM             | Tree structure                      | getElementById       |
+| DTD             | Document Type Definition            | XML validation       |
+| XHTML           | Strict HTML                         | XML syntax           |
 
 ---
 
@@ -1028,24 +1028,24 @@ var func = function() { return "Hello"; };
 #### 1.4 Operations and Expressions
 
 ```javascript
-// Arithmetic
+// Arithmetic operators: +, -, *, /, %, **
 var sum = 10 + 5;          // 15
 var product = 10 * 5;      // 50
 var remainder = 10 % 3;    // 1
 var power = 2 ** 3;        // 8
 
-// Comparison
-5 == "5";    // true (loose equality)
-5 === "5";   // false (strict equality)
+// Comparison operators: ==, ===, !=, !==, >, <, >=, <=
+5 == "5";    // true (loose equality - type coercion)
+5 === "5";   // false (strict equality - no type coercion)
 5 != "5";    // false
 5 !== "5";   // true
 
-// Logical
+// Logical operators: && (and), || (or), ! (not)
 true && false;  // false
 true || false;  // true
 !true;          // false
 
-// Nullish
+// Nullish coalescing operator: ?? (returns right side if left is null/undefined)
 null ?? 'default';  // 'default' (if null/undefined)
 ```
 
@@ -1119,24 +1119,24 @@ arr.forEach(function(item, index) {
 ```javascript
 var fruits = ["Apple", "Banana", "Orange"];
 
-// Access
+// Access - get elements by index or length
 fruits[0];           // "Apple"
 fruits.length;       // 3
 
-// Mutators
+// Mutators - modify the array
 fruits.push("Mango");           // Add to end
 fruits.pop();                   // Remove from end
 fruits.unshift("Grape");        // Add to start
 fruits.shift();                 // Remove from start
 fruits.splice(1, 1, "Kiwi");   // Replace elements
 
-// Iterators
+// Iterators - loop through array and transform data
 fruits.forEach((item, index) => {});
 fruits.map(item => item.toUpperCase());
 fruits.filter(item => item.length > 5);
 fruits.reduce((acc, item) => acc + item, "");
 
-// Search
+// Search - find elements in array
 fruits.indexOf("Banana");      // 1
 fruits.includes("Mango");      // true
 fruits.find(item => item.startsWith("A"));
@@ -1145,31 +1145,31 @@ fruits.find(item => item.startsWith("A"));
 #### 1.7 Functions
 
 ```javascript
-// Function declaration
+// Function declaration - named function that can be called before definition
 function greet(name) {
     return "Hello, " + name;
 }
 
-// Function expression
+// Function expression - function assigned to a variable
 var greet = function(name) {
     return "Hello, " + name;
 };
 
-// Arrow function
+// Arrow function - concise syntax, 'this' is lexically bound
 var greet = (name) => "Hello, " + name;
 var greet = (name) => { return "Hello, " + name; };
 
-// Default parameters
+// Default parameters - default value when argument is not provided
 function greet(name = "Guest") {
     return "Hello, " + name;
 }
 
-// Rest parameters
+// Rest parameters - collect multiple arguments into an array
 function sum(...numbers) {
     return numbers.reduce((a, b) => a + b, 0);
 }
 
-// Callback
+// Callback - function passed as argument to another function
 function callback(x) { return x * 2; }
 [1, 2, 3].map(callback);
 ```
@@ -1187,23 +1187,23 @@ var person = {
     }
 };
 
-// Accessing properties
+// Accessing properties - using dot notation or bracket notation
 person.name;           // John
 person["age"];        // 25
 person.greet();        // "Hello, I'm John"
 
-// Adding/modifying
+// Adding/modifying properties
 person.city = "New York";
 person.age = 26;
 
-// Constructor
+// Constructor - function to create objects
 function Person(name, age) {
     this.name = name;
     this.age = age;
 }
 var p1 = new Person("John", 25);
 
-// ES6 Class
+// ES6 Class - modern syntax for creating objects
 class Person {
     constructor(name, age) {
         this.name = name;
@@ -1259,32 +1259,32 @@ date.getTime();         // Timestamp
 #### 1.10 DOM (Document Object Model)
 
 ```javascript
-// Select elements
+// Select elements - find DOM elements
 document.getElementById("myId");
 document.getElementsByClassName("myClass");
 document.getElementsByTagName("p");
 document.querySelector(".myClass");
 document.querySelectorAll("p");
 
-// Modify content
+// Modify content - change element's HTML or text
 element.innerHTML = "<p>New content</p>";
 element.textContent = "New text";
 element.setAttribute("class", "highlight");
 element.getAttribute("id");
 
-// Modify styles
+// Modify styles - change CSS properties
 element.style.color = "blue";
 element.style.display = "none";
 element.classList.add("active");
 element.classList.remove("active");
 element.classList.toggle("active");
 
-// Create elements
+// Create elements - add new nodes to DOM
 var div = document.createElement("div");
 div.textContent = "Hello";
 document.body.appendChild(div);
 
-// Event handling
+// Event handling - respond to user actions
 element.addEventListener("click", function(event) {
     console.log(event.target);
 });
@@ -1496,16 +1496,16 @@ Declares custom tag library for use in the page.
 
 JSP provides eight implicit objects that are automatically available:
 
-| Object | Class | Purpose |
-|--------|-------|---------|
-| request | HttpServletRequest | Client request data |
-| response | HttpServletResponse | Server response |
-| out | JspWriter | Output to response |
-| session | HttpSession | User session |
-| application | ServletContext | Application scope |
-| config | ServletConfig | Servlet configuration |
-| pageContext | PageContext | Page-scoped context |
-| page | Object | Reference to servlet |
+| Object      | Class               | Purpose               |
+| ----------- | ------------------- | --------------------- |
+| request     | HttpServletRequest  | Client request data   |
+| response    | HttpServletResponse | Server response       |
+| out         | JspWriter           | Output to response    |
+| session     | HttpSession         | User session          |
+| application | ServletContext      | Application scope     |
+| config      | ServletConfig       | Servlet configuration |
+| pageContext | PageContext         | Page-scoped context   |
+| page        | Object              | Reference to servlet  |
 
 **Detailed Usage:**
 
@@ -1581,11 +1581,11 @@ JavaBeans are reusable Java components that follow specific conventions:
 
 **Bean Scope in JSP:**
 
-| Scope | Description |
-|-------|-------------|
-| page | Current page only |
-| request | Current request |
-| session | User session |
+| Scope       | Description       |
+| ----------- | ----------------- |
+| page        | Current page only |
+| request     | Current request   |
+| session     | User session      |
 | application | Whole application |
 
 **Working with Bean Properties:**
@@ -1637,9 +1637,9 @@ String encodedURL = response.encodeURL("checkout.jsp");
 // Automatic session tracking (enabled by default)
 String sessionId = session.getId();
 
-// Create custom cookie
+// Create custom cookie - store data in user's browser
 Cookie userCookie = new Cookie("username", "john");
-userCookie.setMaxAge(3600); // 1 hour
+userCookie.setMaxAge(3600); // 1 hour (in seconds)
 userCookie.setPath("/");
 response.addCookie(userCookie);
 %>
@@ -1768,11 +1768,11 @@ try {
 
 #### 2.3 JSP Directives
 
-| Directive | Description |
-|-----------|-------------|
-| `page` | Page attributes (import, contentType, errorPage, isELIgnored) |
-| `include` | Include file at translation time |
-| `taglib` | Define custom tag library |
+| Directive | Description                                                   |
+| --------- | ------------------------------------------------------------- |
+| `page`    | Page attributes (import, contentType, errorPage, isELIgnored) |
+| `include` | Include file at translation time                              |
+| `taglib`  | Define custom tag library                                     |
 
 ```jsp
 <%@ page import="java.util.*, java.io.*" buffer="8kb" autoFlush="true" %>
@@ -1782,24 +1782,24 @@ try {
 
 #### 2.4 JSP Implicit Objects
 
-| Object | Type | Description |
-|--------|------|-------------|
-| `request` | HttpServletRequest | Client request (request scope) |
-| `response` | HttpServletResponse | Server response |
-| `out` | JspWriter | Output stream |
-| `session` | HttpSession | User session (session scope) |
-| `application` | ServletContext | Application scope |
-| `config` | ServletConfig | Servlet configuration |
-| `pageContext` | PageContext | Page context (page scope) |
-| `page` | Object | This servlet instance |
+| Object        | Type                | Description                    |
+| ------------- | ------------------- | ------------------------------ |
+| `request`     | HttpServletRequest  | Client request (request scope) |
+| `response`    | HttpServletResponse | Server response                |
+| `out`         | JspWriter           | Output stream                  |
+| `session`     | HttpSession         | User session (session scope)   |
+| `application` | ServletContext      | Application scope              |
+| `config`      | ServletConfig       | Servlet configuration          |
+| `pageContext` | PageContext         | Page context (page scope)      |
+| `page`        | Object              | This servlet instance          |
 
 #### 2.5 JSP Scripting Elements
 
-| Element | Tag | Purpose |
-|---------|-----|---------|
+| Element     | Tag      | Purpose                      |
+| ----------- | -------- | ---------------------------- |
 | Declaration | `<%! %>` | Define variables and methods |
-| Scriptlet | `<% %>` | Execute Java code |
-| Expression | `<%= %>` | Output Java expressions |
+| Scriptlet   | `<% %>`  | Execute Java code            |
+| Expression  | `<%= %>` | Output Java expressions      |
 
 #### 2.6 Connecting to Database in JSP
 
@@ -1892,12 +1892,12 @@ if (cookies != null) {
 
 #### 2.9 JSP Scope Objects
 
-| Scope | Description | Accessibility |
-|-------|-------------|---------------|
-| `page` | Current JSP page only | Page only |
-| `request` | Current request | Forward/include between pages |
-| `session` | User session | Across requests |
-| `application` | Whole application | All users |
+| Scope         | Description           | Accessibility                 |
+| ------------- | --------------------- | ----------------------------- |
+| `page`        | Current JSP page only | Page only                     |
+| `request`     | Current request       | Forward/include between pages |
+| `session`     | User session          | Across requests               |
+| `application` | Whole application     | All users                     |
 
 ---
 
@@ -1911,20 +1911,20 @@ if (cookies != null) {
 
 ### Unit II: Quick Reference Card
 
-| Concept | Syntax/Formula | Example |
-|---------|----------------|---------|
-| Variable | `let x = 5` | Block-scoped |
-| Function | `function() {}` | Arrow: `() => {}` |
-| Array | `[]` | `[1, 2, 3]` |
-| Object | `{}` | `{key: value}` |
-| DOM Query | `document.getElementById()` | Select element |
-| JSP Scriptlet | `<% code %>` | Java in HTML |
-| JSP Expression | `<%= expr %>` | Output to page |
-| JSP Declaration | `<%! code %>` | Variables/methods |
-| JSP Bean | `<jsp:useBean>` | Use Java bean |
-| Session | `session.setAttribute()` | Store user data |
-| Cookie | `new Cookie()` | Client storage |
-| Scope | page/request/session/application | Data visibility |
+| Concept         | Syntax/Formula                   | Example           |
+| --------------- | -------------------------------- | ----------------- |
+| Variable        | `let x = 5`                      | Block-scoped      |
+| Function        | `function() {}`                  | Arrow: `() => {}` |
+| Array           | `[]`                             | `[1, 2, 3]`       |
+| Object          | `{}`                             | `{key: value}`    |
+| DOM Query       | `document.getElementById()`      | Select element    |
+| JSP Scriptlet   | `<% code %>`                     | Java in HTML      |
+| JSP Expression  | `<%= expr %>`                    | Output to page    |
+| JSP Declaration | `<%! code %>`                    | Variables/methods |
+| JSP Bean        | `<jsp:useBean>`                  | Use Java bean     |
+| Session         | `session.setAttribute()`         | Store user data   |
+| Cookie          | `new Cookie()`                   | Client storage    |
+| Scope           | page/request/session/application | Data visibility   |
 
 ---
 
@@ -1932,12 +1932,12 @@ if (cookies != null) {
 
 ### Key Differences: HTML vs CSS vs JavaScript vs JSP
 
-| Feature | HTML | CSS | JavaScript | JSP |
-|---------|------|-----|------------|-----|
-| Type | Markup | Style | Script | Server Script |
-| Execution | Browser | Browser | Browser | Server |
-| Database | No | No | No | Yes (JDBC) |
-| Security | Client visible | Client visible | Client visible | Server-side |
+| Feature   | HTML           | CSS            | JavaScript     | JSP           |
+| --------- | -------------- | -------------- | -------------- | ------------- |
+| Type      | Markup         | Style          | Script         | Server Script |
+| Execution | Browser        | Browser        | Browser        | Server        |
+| Database  | No             | No             | No             | Yes (JDBC)    |
+| Security  | Client visible | Client visible | Client visible | Server-side   |
 
 ### Key Concepts to Remember
 
