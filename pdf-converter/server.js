@@ -2,7 +2,8 @@ const express = require("express");
 const rateLimit = require("express-rate-limit");
 const path = require("path");
 const fs = require("fs");
-const { CSS, convertFile } = require("./convert-to-pdf");
+const converter = require("./convert-to-pdf");
+const { CSS_FILE_PATH, convertFile } = converter;
 
 const app = express();
 const NOTES_DIR = path.resolve(__dirname, "..", "notes");
@@ -143,7 +144,34 @@ app.get("/api/pdf/:name", (req, res) => {
 
 // ── Preview CSS (same as PDF output) ──
 app.get("/api/css", (_req, res) => {
-  res.type("text/css").send(CSS);
+  res.type("text/css").send(converter.CSS);
+});
+
+// ── Read raw CSS for the style editor ──
+app.get("/api/styles", (_req, res) => {
+  try {
+    const css = fs.readFileSync(CSS_FILE_PATH, "utf-8");
+    res.json({ css });
+  } catch {
+    res.json({ css: converter.CSS });
+  }
+});
+
+// ── Save updated CSS ──
+app.put("/api/styles", (req, res) => {
+  const { css } = req.body;
+  if (typeof css !== "string") {
+    return res.status(400).json({ error: "CSS must be a string" });
+  }
+  if (css.length > 500 * 1024) {
+    return res.status(400).json({ error: "CSS too large (max 500 KB)" });
+  }
+  try {
+    fs.writeFileSync(CSS_FILE_PATH, css, "utf-8");
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to save styles: " + err.message });
+  }
 });
 
 // ── Serve marked.js from node_modules ──
