@@ -1,12 +1,12 @@
 # Sentinel — AI-Powered Privacy-First Employee Wellbeing Platform
 
-## A Comprehensive Project Report
+## Project Report
 
-**Author:** Mohit Goyal
+**Author:** Pratham Nahata 
 
-**Institution:** [Your Institution]
+**Institution:** BVCOE
 
-**Date:** May 2026
+**Date:** 1 May 2026
 
 ---
 
