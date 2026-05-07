@@ -414,6 +414,9 @@
       <button class="btn btn-primary" onclick="exportPdf()" id="exportBtn" title="Export to PDF">
         📄 Export PDF
       </button>
+      <button class="btn" onclick="toggleStyleEditor()" id="styleBtn" title="Edit PDF styles">
+        🎨 Styles
+      </button>
       <button class="btn" onclick="showNewFileModal()" title="Create new file">
         ➕ New
       </button>
@@ -480,6 +483,42 @@
       <div class="modal-actions">
         <button class="btn" onclick="hideNewFileModal()">Cancel</button>
         <button class="btn btn-primary" onclick="createFile()">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Style Editor Modal -->
+  <div class="modal-backdrop hidden" id="styleEditorModal">
+    <div class="modal" style="min-width:700px;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h3 style="margin:0;">🎨 PDF Styles</h3>
+        <span class="save-indicator saved" id="styleSaveIndicator" style="font-size:11px;">Saved</span>
+      </div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">
+        Edit the CSS below to customize how your PDFs look. Changes are saved to <code style="font-size:12px;background:#f0f4f8;padding:1px 5px;border-radius:3px;">pdf-styles.css</code> and apply to both the live preview and exported PDFs.
+        You can also edit this file directly on GitHub without cloning the repo.
+      </p>
+      <textarea id="styleEditor" spellcheck="false" style="
+        flex:1;
+        min-height:360px;
+        width:100%;
+        border:1px solid var(--border);
+        border-radius:6px;
+        font-family:'SF Mono','Cascadia Code','Fira Code','JetBrains Mono',Consolas,'Liberation Mono',monospace;
+        font-size:12.5px;
+        line-height:1.6;
+        padding:14px 16px;
+        resize:vertical;
+        outline:none;
+        tab-size:2;
+        color:var(--text);
+        background:#fafbfc;
+      "></textarea>
+      <div class="modal-actions" style="margin-top:14px;">
+        <button class="btn btn-danger btn-sm" onclick="resetStyles()" title="Reset to default styles">↩️ Reset Defaults</button>
+        <span style="flex:1"></span>
+        <button class="btn" onclick="hideStyleEditor()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveStyles()">💾 Save Styles</button>
       </div>
     </div>
   </div>
@@ -854,7 +893,17 @@
       document.addEventListener("keydown", (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key === "s") {
           e.preventDefault();
-          saveFile();
+          // Save styles if style editor is open, otherwise save file
+          if (!document.getElementById("styleEditorModal").classList.contains("hidden")) {
+            saveStyles();
+          } else {
+            saveFile();
+          }
+        }
+        if (e.key === "Escape") {
+          if (!document.getElementById("styleEditorModal").classList.contains("hidden")) {
+            hideStyleEditor();
+          }
         }
       });
 
@@ -862,6 +911,101 @@
         if (e.key === "Enter") createFile();
         if (e.key === "Escape") hideNewFileModal();
       });
+
+      // Tab key inserts spaces in style editor too
+      document.getElementById("styleEditor").addEventListener("keydown", (e) => {
+        if (e.key === "Tab") {
+          e.preventDefault();
+          const ta = e.target;
+          const start = ta.selectionStart;
+          const end = ta.selectionEnd;
+          ta.value = ta.value.substring(0, start) + "  " + ta.value.substring(end);
+          ta.selectionStart = ta.selectionEnd = start + 2;
+        }
+      });
+    }
+
+    // ── Style Editor ──
+    let originalStyles = "";
+
+    async function toggleStyleEditor() {
+      const modal = document.getElementById("styleEditorModal");
+      if (modal.classList.contains("hidden")) {
+        await showStyleEditor();
+      } else {
+        hideStyleEditor();
+      }
+    }
+
+    async function showStyleEditor() {
+      try {
+        const res = await fetch("/api/styles");
+        const data = await res.json();
+        originalStyles = data.css;
+        document.getElementById("styleEditor").value = data.css;
+        document.getElementById("styleEditorModal").classList.remove("hidden");
+        updateStyleSaveIndicator(true);
+        document.getElementById("styleEditor").focus();
+      } catch (e) {
+        toast("Failed to load styles", "error");
+      }
+    }
+
+    function hideStyleEditor() {
+      document.getElementById("styleEditorModal").classList.add("hidden");
+    }
+
+    function updateStyleSaveIndicator(saved) {
+      const el = document.getElementById("styleSaveIndicator");
+      if (saved) {
+        el.className = "save-indicator saved";
+        el.textContent = "Saved";
+      } else {
+        el.className = "save-indicator unsaved";
+        el.textContent = "Unsaved";
+      }
+    }
+
+    // Track changes in style editor
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("styleEditor").addEventListener("input", () => {
+        updateStyleSaveIndicator(false);
+      });
+    });
+
+    async function saveStyles() {
+      const css = document.getElementById("styleEditor").value;
+      try {
+        const res = await fetch("/api/styles", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ css }),
+        });
+        if (!res.ok) throw new Error("Save failed");
+
+        originalStyles = css;
+        // Reload the preview CSS so the live preview updates immediately
+        previewCSS = css;
+        applyPreviewCSS();
+        updateStyleSaveIndicator(true);
+        toast("Styles saved", "success");
+      } catch (e) {
+        toast("Failed to save styles", "error");
+      }
+    }
+
+    async function resetStyles() {
+      if (!confirm("Reset to default styles? Your custom styles will be lost.")) return;
+      try {
+        // Fetch the server's built-in default CSS
+        const res = await fetch("/api/css");
+        const defaultCSS = await res.text();
+        document.getElementById("styleEditor").value = defaultCSS;
+        updateStyleSaveIndicator(false);
+        toast("Defaults loaded — click Save to apply", "info");
+      } catch (e) {
+        toast("Failed to load defaults", "error");
+      }
     }
 
     // ── Utilities ──

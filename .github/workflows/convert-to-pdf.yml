@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "notes/**"
+      - "pdf-converter/pdf-styles.css"
   workflow_dispatch:
 
 permissions:
@@ -27,8 +28,15 @@ jobs:
             # Manual trigger: convert all markdown files
             find notes -name '*.md' -type f > /tmp/changed_files.txt
           else
-            # Push trigger: only convert changed markdown files
-            git diff --name-only --diff-filter=ACMR HEAD~1 HEAD | grep -E '^notes/.*\.md$' > /tmp/changed_files.txt || true
+            # If pdf-styles.css changed, reconvert all notes
+            CSS_CHANGED=$(git diff --name-only --diff-filter=ACMR HEAD~1 HEAD | grep -c 'pdf-converter/pdf-styles.css' || true)
+            if [ "$CSS_CHANGED" -gt 0 ]; then
+              echo "PDF styles changed — reconverting all notes"
+              find notes -name '*.md' -type f > /tmp/changed_files.txt
+            else
+              # Push trigger: only convert changed markdown files
+              git diff --name-only --diff-filter=ACMR HEAD~1 HEAD | grep -E '^notes/.*\.md$' > /tmp/changed_files.txt || true
+            fi
           fi
           if [ -s /tmp/changed_files.txt ]; then
             echo "has_files=true" >> "$GITHUB_OUTPUT"
